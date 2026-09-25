@@ -1,0 +1,20 @@
+# Reference: CPython 3.11, Windows/Linux x86_64, CPU.
+# Official prebuilt wheels only: do not compile dependencies from source.
+--index-url https://pypi.org/simple
+--find-links https://download.pytorch.org/whl/cpu/torch/
+--only-binary=:all:
+
+torch==2.7.1+cpu
+torch_geometric==2.7.0
+scikit-learn==1.7.2
+matplotlib==3.10.6
+networkx==3.5
+pytest==8.4.2
+pytest-cov>=5.0.0
+
+# Numerical stack used by preprocessing and evaluation.
+numpy==2.2.6
+scipy==1.15.3
+
+# Optional torch-scatter / torch-sparse: install AFTER this file if needed.
+# See README.md for the matching pt27cpu wheel command.
