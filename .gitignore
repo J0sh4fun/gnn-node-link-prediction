@@ -1,0 +1,6 @@
+.venv/
+data/cora/
+runs/
+**/.ipynb_checkpoints/
+**/__pycache__/
+*.pyc

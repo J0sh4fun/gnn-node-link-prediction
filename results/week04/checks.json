@@ -1,0 +1,240 @@
+{
+  "status": "passed",
+  "checks": {
+    "grouped_softmax_multhead_large_single_gradient": {
+      "status": "passed",
+      "alpha": [
+        [
+          0.2689414213699951,
+          0.11920292202211755
+        ],
+        [
+          0.7310585786300049,
+          0.8807970779778823
+        ],
+        [
+          1.0,
+          1.0
+        ]
+      ]
+    },
+    "concat_mean_shape": {
+      "status": "passed",
+      "concat": [
+        4,
+        6
+      ],
+      "mean": [
+        4,
+        2
+      ]
+    },
+    "reject_bad_target": {
+      "status": "passed",
+      "observed": "Score/index không hợp lệ"
+    },
+    "graph/canonical_bidirectional_loops_isolated": {
+      "status": "passed",
+      "canonical": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "loop_count": 4
+    },
+    "graph/reject_shape": {
+      "status": "passed",
+      "observed": "edge_index phải có shape [2,M], dtype integer"
+    },
+    "graph/reject_dtype": {
+      "status": "passed",
+      "observed": "edge_index phải có shape [2,M], dtype integer"
+    },
+    "graph/reject_range": {
+      "status": "passed",
+      "observed": "Node index ngoài miền [0,num_nodes)"
+    },
+    "graph/reject_negative": {
+      "status": "passed",
+      "observed": "Node index ngoài miền [0,num_nodes)"
+    },
+    "graph/message_passing_reference_gradient_permutation": {
+      "status": "passed",
+      "output": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          2.0,
+          1.0
+        ],
+        [
+          0.0,
+          1.0
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "shape": [
+        4,
+        2
+      ],
+      "dtype": "torch.float32",
+      "device": "cpu"
+    },
+    "training/early_stopping_min": {
+      "status": "passed",
+      "best_epoch": 1,
+      "flags": [
+        [
+          true,
+          false
+        ],
+        [
+          true,
+          false
+        ],
+        [
+          false,
+          false
+        ],
+        [
+          false,
+          true
+        ]
+      ]
+    },
+    "training/early_stopping_max": {
+      "status": "passed",
+      "best_epoch": 1,
+      "flags": [
+        [
+          true,
+          false
+        ],
+        [
+          true,
+          false
+        ],
+        [
+          false,
+          false
+        ],
+        [
+          false,
+          true
+        ]
+      ]
+    },
+    "training/invalid_mode": {
+      "status": "passed",
+      "observed": "mode/patience/min_delta không hợp lệ"
+    },
+    "training/nan_validation": {
+      "status": "passed",
+      "observed": "Validation metric không hữu hạn"
+    },
+    "training/optimizer_gradient_loss_checkpoint": {
+      "status": "passed",
+      "best_epoch": 31,
+      "restored_validation_mse": 0.0003531498368829489,
+      "epochs": 44
+    },
+    "training/restore_best_not_last": {
+      "status": "passed",
+      "best_epoch": 1,
+      "last_epoch": 3,
+      "probe_run_id": "20260928T070159_w4_checkpoint_probe_c53bcea3"
+    },
+    "summary_provenance": {
+      "status": "passed",
+      "cora_split_hash": "9febb7a31cc7f0362d6c4d39bf7c7a37d6af96a3b9f2ea0f8c7b8630e2cb8c98",
+      "source_runs": {
+        "W2.1": "20260928T070055_w2_eda_9ff70574",
+        "W2.3": "20260928T070114_w2_audit_2c83ad20",
+        "W3.1": "20260928T070135_w3_cosine_a81fd148",
+        "W4.1": "20260928T070150_w4_graph_8e183432",
+        "W4.2": "20260928T070158_w4_training_dc7d5249"
+      }
+    }
+  },
+  "pending": [
+    "B tự đọc/chạy/giải thích lại",
+    "GAT hoàn chỉnh ở tuần 6"
+  ],
+  "cora_validation": {
+    "roc_auc": 0.8121701918489497,
+    "average_precision": 0.8248011097161196,
+    "n_positive": 263,
+    "n_negative": 263
+  },
+  "cora_split_hash": "9febb7a31cc7f0362d6c4d39bf7c7a37d6af96a3b9f2ea0f8c7b8630e2cb8c98",
+  "run_id": "20260928T070206_w4_checkin_265c4ce5",
+  "config": {
+    "dataset": "toy",
+    "model": "linear_regression",
+    "task": "regression",
+    "seed": 42,
+    "device": "cpu",
+    "learning_rate": 0.05,
+    "weight_decay": 0.0,
+    "max_epochs": 150,
+    "patience": 12,
+    "monitor": "validation_mse",
+    "mode": "min",
+    "min_delta": 1e-06
+  },
+  "config_path": "runs/20260928T070206_w4_checkin_265c4ce5/config.json",
+  "environment": {
+    "python": "3.11.9",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "packages": {
+      "torch": "2.14.0+cu132",
+      "torch-geometric": "2.8.0.post1",
+      "numpy": "2.4.6",
+      "scipy": "1.17.1",
+      "scikit-learn": "1.9.1",
+      "matplotlib": "3.11.2",
+      "ipython": "9.17.1",
+      "nbformat": "5.11.1",
+      "nbclient": "0.11.0",
+      "ipykernel": "7.3.0"
+    },
+    "code_revision": "b8710aac95df1178969645a699daaa26edcdbd2e",
+    "dirty_worktree": true,
+    "branch": "feature/gat-link-prediction",
+    "source_hashes": {
+      "notebooks/member_b/week02/01_cora_eda.ipynb": "ed3578485cb2f803e5232f123152f4cbd96fc4e1c19f5627cca154a62a56015c",
+      "notebooks/member_b/week02/02_link_prediction_split.ipynb": "0662e5d6ef29def2737f269c27875af86abed296d4b2569ea867f93a93c6b14f",
+      "notebooks/member_b/week02/03_leakage_audit.ipynb": "c09231d877b0a0d89d5ead9fd60d423a3c42aa16a957e096f38c4569810ac876",
+      "notebooks/member_b/week03/01_cosine_baseline.ipynb": "80bc0c5d061dafd08c946e87e9862249ac5bae26866791c1c09e612dd422b5b2",
+      "notebooks/member_b/week03/02_baseline_analysis.ipynb": "e6dc5ae8948e837ef98d92703b0a1e7bc7c6828c9dd7677e3530d6fa6338b8a3",
+      "notebooks/member_b/week04/01_graph_utilities_and_message_passing.ipynb": "8352888d47157d7b59077f66ae3a75f1410f7fd965245f5447a42aa2b6706904",
+      "notebooks/member_b/week04/02_training_framework_validation.ipynb": "78160f7e3b2b83242cb67790bfedde5bbc2aac27064842db7730e30f18dcadd9",
+      "notebooks/member_b/week04/03_gat_design_and_checkin.ipynb": "0969406a8417292791a919150323f8b40dfa88112f6c02678089ac44280a3d77",
+      "notebooks/shared/graph_ops.ipynb": "5444a06a6dead4fe522b279b6f1aefeb4bbad675648ba05fca7a49a20b02c92a",
+      "notebooks/shared/metrics.ipynb": "78cf4559c43dff0b38013fe4a86af486d3a878f793a043a1fe9a3198ab39e6f1",
+      "notebooks/shared/runtime.ipynb": "d78fb76b1db73f8d51f829582e2089ca21c5e098118403aaa9cf48333e26c176",
+      "notebooks/shared/training.ipynb": "ebfe565fd5f39e2132ba7ac1616422d3468cf3f1733a4f7f3925abc6568b3a70",
+      "configs/cosine_baseline.json": "ad06a2def8207d57f1e3b31fb44f35ffb0faf8a1f618c210201ee2c5f1e9d1b5",
+      "configs/data_protocol.json": "34d8157d344d77eed42e6b794446ba42d22b43a76217f31ce3f755bbb73f86d5",
+      "configs/training_demo.json": "7ef448c1c28393fc56779b5f8603de8da4884b4dd666e7e97b06c078561508fb"
+    },
+    "cuda_available": true
+  },
+  "week": 4,
+  "task": "W4.3",
+  "model": "checkin",
+  "dataset": "toy",
+  "split_id": null,
+  "split_hash": null,
+  "test_value": null
+}
