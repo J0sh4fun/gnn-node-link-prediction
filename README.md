@@ -1,20 +1,75 @@
-# GNN node classification & link prediction — phần thành viên B
+# GNN Node Classification & Link Prediction on Cora
 
-Branch `feature/gat-link-prediction` triển khai [kế hoạch tuần 2–4](docs/plans/member_b_weeks_02_04.md): Cora EDA, split LP cố định, audit leakage, cosine baseline trên validation và framework/prototype tuần 4. [Kế hoạch nhóm](docs/plans/project_plan.md) và [quy ước thực nghiệm](docs/protocol.md) là tài liệu nền. Phần B chạy độc lập, chưa ghép implementation của A. GAT hoàn chỉnh thuộc tuần 6.
+Dự án nghiên cứu và triển khai Graph Neural Networks (GCN & GAT) cho hai bài toán: **Node Classification** (Thành viên A) và **Link Prediction** (Thành viên B) trên tập dữ liệu Cora.
 
-**Check-in 1 (2026-09-28):** W2 audit và W4 toy checks đã pass; cosine validation ROC-AUC 0,81217 / AP 0,82480 trên [split cố định](artifacts/splits/cora_lp_v1/manifest.json). [Kết quả và nguồn run](results/week04/checks.json) cho phép đối chiếu từng bước. B chưa xác nhận đã tự review.
+---
 
-Xem [mục lục notebook](notebooks/README.md), [mục lục báo cáo](report/README.md), [hướng dẫn tái lập](docs/reproducibility.md) và [quyết định](docs/decisions.md). Các kết quả được chọn trong `results/`; `runs/` giữ log/checkpoint từng lần chạy trên máy local.
+## 1. Cấu trúc phân công
 
-## Bắt đầu
+- **Thành viên A (Node Classification & GCN):**
+  - Data loading với chuẩn hóa $L_1$ node features: `utils/data_loader.py`.
+  - Mô hình baseline MLP: `models/mlp.py`, pipeline huấn luyện: `train/train_mlp.py`.
+  - Khung huấn luyện module hóa `NodeClassificationTrainer`: `train/trainer.py`.
+  - Thư viện đánh giá và độ đo: `utils/evaluate.py`.
+  - Báo cáo lý thuyết phổ và công thức GCN: `report/GCN_Spectral_to_Formula_vi.md`.
+  - Test suite hoàn chỉnh: `tests/`.
 
-Trên Windows PowerShell với Python 3.11:
+- **Thành viên B (Link Prediction & GAT):**
+  - Phân tích khám phá dữ liệu Cora EDA: `notebooks/member_b/week02/01_cora_eda.ipynb`.
+  - Chia tập cạnh cố định (85% train, 5% val, 10% test) và negative sampling 1:1: `artifacts/splits/cora_lp_v1/`.
+  - Kiểm toán rò rỉ dữ liệu (leakage audit): `notebooks/member_b/week02/03_leakage_audit.ipynb`.
+  - Baseline Cosine Similarity trên node features (Validation ROC-AUC 0.81217 / AP 0.82480): `notebooks/member_b/week03/`.
+  - Thiết kế và kiểm thử prototype GAT, neighborhood attention & training framework: `notebooks/member_b/week04/`.
+  - Báo cáo tiến độ theo tuần: `report/week01/` đến `report/week04/`.
 
+---
+
+## 2. Cài đặt môi trường
+
+Cấu hình tham chiếu: **Python 3.11, Windows / Linux x86_64**.
+
+### Trên Windows PowerShell:
 ```powershell
 python -m venv .venv
+.\.venv\Scripts\Activate.ps1
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
 ```
 
-Mở notebook bằng VS Code với kernel `.venv`, hoặc cài JupyterLab riêng và mở từ repo. Chạy theo [thứ tự](notebooks/README.md) bằng **Restart Kernel and Run All**. Cora sẽ tải vào `data/cora/` nếu chưa có; bản tải/cache không theo Git. Các notebook chỉ dùng đường dẫn tương đối từ root. Nếu checkout đã có `artifacts/splits/cora_lp_v1/`, W2.2 kiểm tra split hiện có, không ghi đè.
+### Kiểm tra môi trường:
+```powershell
+.\.venv\Scripts\python.exe -c "import torch, torch_geometric; print('torch:', torch.__version__, 'PyG:', torch_geometric.__version__)"
+```
 
-Tuần 2–4 chỉ công bố validation ROC-AUC/AP. Trường test được để rỗng cho final evaluation sau này. Để giải thích số liệu, truy từ [experiment index](results/experiment_index.csv) đến result JSON, run ID, config, manifest và notebook.
+---
+
+## 3. Hướng dẫn chạy
+
+### Chạy phần của Thành viên A (Node Classification):
+- Chạy unit tests:
+  ```powershell
+  .\.venv\Scripts\python.exe -m pytest tests/ -v
+  ```
+- Huấn luyện baseline MLP:
+  ```powershell
+  .\.venv\Scripts\python.exe train/train_mlp.py
+  ```
+
+### Chạy phần của Thành viên B (Link Prediction):
+- Chạy tự động toàn bộ pipeline notebook:
+  ```powershell
+  .\.venv\Scripts\python.exe runs/run_all.py
+  ```
+- Hoặc mở từng notebook trong `notebooks/member_b/` bằng VS Code và chọn kernel `.venv`.
+
+---
+
+## 4. Graph Convention
+
+Nhóm sử dụng Cora dưới dạng **đồ thị vô hướng**, áp dụng nhất quán cho cả GCN và GAT:
+
+$$
+\tilde{A} = A + I_N, \qquad \hat{A} = \tilde{D}^{-\frac{1}{2}} \tilde{A} \tilde{D}^{-\frac{1}{2}}
+$$
+
+- **Node classification:** Message passing trên toàn bộ đồ thị đã đối xứng; chỉ tính loss trên train mask.
+- **Link prediction:** Tách biệt cạnh strictly: encoder adjacency chỉ chứa `train_pos` đã đối xứng hai chiều. Tuyệt đối không chứa cạnh `val` hay `test`. Negative edges lấy từ phần bù của toàn bộ đồ thị gốc, tỷ lệ 1:1 và không trùng nhau giữa các tập.

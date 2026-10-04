@@ -1,6 +1,53 @@
+# Python bytecode and build artifacts
+__pycache__/
+*.py[cod]
+build/
+dist/
+*.egg-info/
+
+# Local virtual environments
 .venv/
-data/cora/
-runs/
+venv/
+env/
+
+# Test, coverage, and analysis caches
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
 **/.ipynb_checkpoints/
-**/__pycache__/
-*.pyc
+
+# Downloaded datasets
+data/cora/
+/data/*
+!/data/.gitkeep
+!/data/README.md
+
+# Generated model weights and training logs
+*.pt
+*.pth
+*.ckpt
+/checkpoints/
+runs/
+/runs/
+/wandb/
+*.log
+
+# Local secrets
+.env
+.env.*
+!.env.example
+!.env.template
+
+# Local editor and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+*.swo

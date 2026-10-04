@@ -1,0 +1,16 @@
+{
+  "model": "MLP",
+  "dataset": "Cora",
+  "seed": 42,
+  "learning_rate": 0.01,
+  "weight_decay": 0.0005,
+  "hidden_dim": 16,
+  "num_layers": 2,
+  "dropout": 0.5,
+  "stopped_epoch": 200,
+  "best_val_loss": 1.3302887678146362,
+  "val_accuracy": 0.588,
+  "val_macro_f1": 0.5681975052916394,
+  "test_accuracy": 0.568,
+  "test_macro_f1": 0.5386504117428538
+}
