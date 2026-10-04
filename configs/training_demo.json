@@ -1,0 +1,14 @@
+{
+  "dataset": "toy",
+  "model": "linear_regression",
+  "task": "regression",
+  "seed": 42,
+  "device": "cpu",
+  "learning_rate": 0.05,
+  "weight_decay": 0.0,
+  "max_epochs": 150,
+  "patience": 12,
+  "monitor": "validation_mse",
+  "mode": "min",
+  "min_delta": 1e-06
+}

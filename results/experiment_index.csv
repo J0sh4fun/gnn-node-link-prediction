@@ -1,0 +1,7 @@
+run_id,week,owner,task,model,dataset,split_id,split_hash,seed,config_path,code_revision,dirty_worktree,validation_metric,validation_value,test_value,result_path
+20260928T070055_w2_eda_9ff70574,2,B,W2.1,eda,Cora,,,42,runs/20260928T070055_w2_eda_9ff70574/config.json,b8710aac95df1178969645a699daaa26edcdbd2e,True,,,,results/week02/eda_summary.json
+20260928T070114_w2_audit_2c83ad20,2,B,W2.3,audit,Cora,cora_lp_v1,9febb7a31cc7f0362d6c4d39bf7c7a37d6af96a3b9f2ea0f8c7b8630e2cb8c98,42,runs/20260928T070114_w2_audit_2c83ad20/config.json,b8710aac95df1178969645a699daaa26edcdbd2e,True,,,,results/week02/leakage_audit.json
+20260928T070135_w3_cosine_a81fd148,3,B,W3.1,cosine,Cora,cora_lp_v1,9febb7a31cc7f0362d6c4d39bf7c7a37d6af96a3b9f2ea0f8c7b8630e2cb8c98,42,runs/20260928T070135_w3_cosine_a81fd148/config.json,b8710aac95df1178969645a699daaa26edcdbd2e,True,roc_auc,0.8121701918489497,,results/week03/cosine_validation.json
+20260928T070150_w4_graph_8e183432,4,B,W4.1,projected_sum,toy,,,42,runs/20260928T070150_w4_graph_8e183432/config.json,b8710aac95df1178969645a699daaa26edcdbd2e,True,,,,results/week04/graph_checks.json
+20260928T070158_w4_training_dc7d5249,4,B,W4.2,linear_regression,toy,,,42,runs/20260928T070158_w4_training_dc7d5249/config.json,b8710aac95df1178969645a699daaa26edcdbd2e,True,validation_mse,0.0003531498368829489,,results/week04/training_checks.json
+20260928T070206_w4_checkin_265c4ce5,4,B,W4.3,checkin,toy,,,42,runs/20260928T070206_w4_checkin_265c4ce5/config.json,b8710aac95df1178969645a699daaa26edcdbd2e,True,,,,results/week04/checks.json

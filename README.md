@@ -1,133 +1,75 @@
-# gnn-node-link-prediction
+# GNN Node Classification & Link Prediction on Cora
 
-## Cài đặt môi trường
+Dự án nghiên cứu và triển khai Graph Neural Networks (GCN & GAT) cho hai bài toán: **Node Classification** (Thành viên A) và **Link Prediction** (Thành viên B) trên tập dữ liệu Cora.
 
-Cấu hình tham chiếu: **CPython 3.11, Windows/Linux x86_64, CPU**, với PyTorch
-**2.7.1+cpu** và PyG **2.7.0**. CPU giúp hai thành viên chạy các thí nghiệm Cora
-ban đầu mà không phụ thuộc GPU/CUDA. `requirements.txt` khóa phiên bản các
-thư viện chính; `environment.yml` dùng lại file này để tránh lệch phiên bản.
-Đây chưa phải lockfile cho toàn bộ dependency gián tiếp.
+---
 
-Chạy từ thư mục gốc repository và chọn **một** trong hai cách:
+## 1. Cấu trúc phân công
 
-**Conda (khuyến nghị):**
+- **Thành viên A (Node Classification & GCN):**
+  - Data loading với chuẩn hóa $L_1$ node features: `utils/data_loader.py`.
+  - Mô hình baseline MLP: `models/mlp.py`, pipeline huấn luyện: `train/train_mlp.py`.
+  - Khung huấn luyện module hóa `NodeClassificationTrainer`: `train/trainer.py`.
+  - Thư viện đánh giá và độ đo: `utils/evaluate.py`.
+  - Báo cáo lý thuyết phổ và công thức GCN: `report/GCN_Spectral_to_Formula_vi.md`.
+  - Test suite hoàn chỉnh: `tests/`.
 
-```sh
-conda env create -f environment.yml
-conda activate gnn-cora
-```
+- **Thành viên B (Link Prediction & GAT):**
+  - Phân tích khám phá dữ liệu Cora EDA: `notebooks/member_b/week02/01_cora_eda.ipynb`.
+  - Chia tập cạnh cố định (85% train, 5% val, 10% test) và negative sampling 1:1: `artifacts/splits/cora_lp_v1/`.
+  - Kiểm toán rò rỉ dữ liệu (leakage audit): `notebooks/member_b/week02/03_leakage_audit.ipynb`.
+  - Baseline Cosine Similarity trên node features (Validation ROC-AUC 0.81217 / AP 0.82480): `notebooks/member_b/week03/`.
+  - Thiết kế và kiểm thử prototype GAT, neighborhood attention & training framework: `notebooks/member_b/week04/`.
+  - Báo cáo tiến độ theo tuần: `report/week01/` đến `report/week04/`.
 
-**venv trên Windows PowerShell** (cần CPython 3.11 bản 64-bit):
+---
 
+## 2. Cài đặt môi trường
+
+Cấu hình tham chiếu: **Python 3.11, Windows / Linux x86_64**.
+
+### Trên Windows PowerShell:
 ```powershell
-py -3.11 -m venv .venv
-.\.venv\Scripts\python.exe -m pip install pip==25.2
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
 ```
 
-Trên Linux, tạo môi trường bằng `python3.11 -m venv .venv`, kích hoạt bằng
-`source .venv/bin/activate`, sau đó chạy `python -m pip install pip==25.2`
-và `python -m pip install -r requirements.txt`.
-
-### Dependency mở rộng của PyG
-
-Theo [hướng dẫn PyG 2.7.0](https://pytorch-geometric.readthedocs.io/en/2.7.0/install/installation.html),
-`torch-scatter` và `torch-sparse` là tùy chọn. Với GCN/GAT dùng `MessagePassing`
-và `edge_index` dạng tensor, bắt đầu bằng môi trường tối thiểu ở trên. Cài thêm
-nếu code trực tiếp dùng `torch_scatter`, `torch_sparse.SparseTensor` hoặc một
-tính năng yêu cầu chúng.
-
-Sau khi cài môi trường cơ bản, cài wheel **CPU cho PyTorch 2.7.x** nếu cần:
-
-```sh
-python -m pip install --no-index --only-binary=:all: --find-links https://data.pyg.org/whl/torch-2.7.0+cpu.html torch-scatter==2.1.2+pt27cpu torch-sparse==0.6.18+pt27cpu
+### Kiểm tra môi trường:
+```powershell
+.\.venv\Scripts\python.exe -c "import torch, torch_geometric; print('torch:', torch.__version__, 'PyG:', torch_geometric.__version__)"
 ```
 
-Trang wheel dùng mốc `2.7.0` cho cả dòng torch `2.7.*`, bao gồm `2.7.1`.
-`--only-binary=:all:` báo lỗi nếu không có wheel tương thích, tránh tự biên
-dịch C++/CUDA. Với venv PowerShell chưa kích hoạt, thay `python` trong các
-lệnh ở đây bằng `.\.venv\Scripts\python.exe`.
+---
 
-Nếu chuyển sang GPU, tạo môi trường riêng và đổi đồng bộ bản torch cùng wheel
-extension theo CUDA của **bản torch đã cài**, theo
-[hướng dẫn PyTorch](https://pytorch.org/get-started/previous-versions/) và
-bảng tương thích PyG ở trên. Không dùng wheel `pt27cpu` với torch CUDA;
-`requirements.txt` hiện tại cố định CPU.
+## 3. Hướng dẫn chạy
 
-### Kiểm tra sau cài đặt
+### Chạy phần của Thành viên A (Node Classification):
+- Chạy unit tests:
+  ```powershell
+  .\.venv\Scripts\python.exe -m pytest tests/ -v
+  ```
+- Huấn luyện baseline MLP:
+  ```powershell
+  .\.venv\Scripts\python.exe train/train_mlp.py
+  ```
 
-```sh
-python -m pip check
-python -c "import torch, torch_geometric, sklearn, matplotlib, networkx, pytest; print('torch:', torch.__version__, 'PyG:', torch_geometric.__version__, 'CUDA:', torch.version.cuda)"
-python -c "import torch; from torch_geometric.nn import GCNConv; from torch_geometric.utils import to_undirected, is_undirected; e = to_undirected(torch.tensor([[0, 1], [1, 2]]), num_nodes=3); x = torch.ones(3, 2, requires_grad=True); conv = GCNConv(2, 2); y = conv(x, e); y.sum().backward(); assert is_undirected(e) and y.shape == (3, 2) and x.grad is not None and torch.isfinite(x.grad).all(); print('MessagePassing forward/backward: OK')"
-```
+### Chạy phần của Thành viên B (Link Prediction):
+- Chạy tự động toàn bộ pipeline notebook:
+  ```powershell
+  .\.venv\Scripts\python.exe runs/run_all.py
+  ```
+- Hoặc mở từng notebook trong `notebooks/member_b/` bằng VS Code và chọn kernel `.venv`.
 
-Nếu đã cài extension tùy chọn, kiểm tra thêm:
+---
 
-```sh
-python -c "import torch_scatter, torch_sparse; print(torch_scatter.__version__, torch_sparse.__version__)"
-```
+## 4. Graph Convention
 
-## Graph Convention
-
-Theo **Mục 2.4 của [kế hoạch đồ án](Plan_GNN.md)**, nhóm sử dụng Cora dưới dạng
-**đồ thị vô hướng**, áp dụng nhất quán cho **GCN và GAT**, trong cả **node
-classification và link prediction**. Quy ước này được giữ cố định giữa các
-thí nghiệm.
-
-Quan hệ trích dẫn thực tế có hướng: bài báo A trích dẫn bài báo B không có
-nghĩa B trích dẫn A. Tuy nhiên, kế hoạch chọn cách biểu diễn benchmark Cora
-bằng ma trận kề đối xứng để phù hợp với chuẩn hóa GCN gốc:
+Nhóm sử dụng Cora dưới dạng **đồ thị vô hướng**, áp dụng nhất quán cho cả GCN và GAT:
 
 $$
-\tilde{A}=A+I,\qquad
-\hat{A}=\tilde{D}^{-1/2}\tilde{A}\tilde{D}^{-1/2}.
+\tilde{A} = A + I_N, \qquad \hat{A} = \tilde{D}^{-\frac{1}{2}} \tilde{A} \tilde{D}^{-\frac{1}{2}}
 $$
 
-Hai bài báo có liên kết có thể trao đổi thông tin theo cả hai chiều. GAT dùng
-cùng tập láng giềng để việc so sánh với GCN phản ánh khác biệt của cơ chế tổng
-hợp/attention trên cùng cấu trúc đồ thị. Điều này không buộc trọng số attention
-hai chiều của GAT phải bằng nhau.
-
-**Tiền xử lý:** symmetrize `edge_index` bằng `to_undirected()` trước khi tạo
-các pipeline riêng cho hai bài toán:
-
-```python
-from torch_geometric.datasets import Planetoid
-from torch_geometric.utils import is_undirected, to_undirected
-
-dataset = Planetoid(root="data/Planetoid", name="Cora", split="public")
-data = dataset[0]
-data.edge_index = to_undirected(data.edge_index, num_nodes=data.num_nodes)
-assert is_undirected(data.edge_index, num_nodes=data.num_nodes)
-```
-
-[`to_undirected()`](https://pytorch-geometric.readthedocs.io/en/2.7.0/modules/utils.html#torch_geometric.utils.to_undirected)
-bảo đảm mỗi cạnh `(u, v)` có cạnh ngược `(v, u)` và gộp cạnh trùng. Với Cora
-không có trọng số cạnh, có thể gọi lại an toàn nếu dữ liệu đã đối xứng.
-Hai cột này trong `edge_index` biểu diễn **một liên kết vô hướng**; khi báo
-cáo số liên kết không có self-loop, lấy số cột sau symmetrize chia hai.
-
-**Self-loop là bước riêng:** `to_undirected()` không tự thêm self-loop. GCN
-thêm đúng một self-loop cho mỗi nút **trước khi tính bậc và hệ số chuẩn hóa**;
-GAT cũng đưa chính nút đó vào attention neighborhood. Lớp mô hình xử lý việc
-thêm self-loop, tránh thêm trùng; giữ quy ước cố định trừ khi ablation chỉ rõ
-thay đổi (Mục 2.2–2.3).
-
-**Áp dụng trong hai bài toán:**
-
-- **Node classification:** dùng toàn bộ đồ thị đã đối xứng cho message
-  passing; giữ nguyên mask Planetoid chuẩn và chỉ tính loss trên train mask.
-- **Link prediction:** chia theo cặp nút không thứ tự `{u, v}`; hai chiều
-  `(u, v)` và `(v, u)` phải thuộc cùng một tập. Khi tuning và đánh giá
-  validation, encoder chỉ nhận train edges đã đối xứng, không chứa bất kỳ
-  chiều nào của cạnh validation/test. Khi final test, retrain từ đầu trên
-  train + validation edges theo Mục 3.3, vẫn loại cả hai chiều của test edges.
-  Negative edges phải vắng mặt trong toàn bộ đồ thị gốc ở cả hai chiều;
-  các tập negative không trùng nhau theo cặp không thứ tự và có tỷ lệ 1:1
-  với positive tương ứng (Mục 3.2).
-
-Vì vậy, link prediction dự đoán **sự tồn tại của quan hệ trích dẫn/liên quan
-giữa hai bài báo, bất kể chiều**, không dự đoán “bài báo nào trích dẫn bài báo
-nào” (Mục 3.4). Quy ước này cũng phù hợp với decoder dot-product đối xứng
-`p(u, v) = sigmoid(z_uᵀ z_v) = p(v, u)`.
+- **Node classification:** Message passing trên toàn bộ đồ thị đã đối xứng; chỉ tính loss trên train mask.
+- **Link prediction:** Tách biệt cạnh strictly: encoder adjacency chỉ chứa `train_pos` đã đối xứng hai chiều. Tuyệt đối không chứa cạnh `val` hay `test`. Negative edges lấy từ phần bù của toàn bộ đồ thị gốc, tỷ lệ 1:1 và không trùng nhau giữa các tập.

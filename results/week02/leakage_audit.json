@@ -1,0 +1,120 @@
+{
+  "status": "passed",
+  "checks": {
+    "train_pos_shape_unique_canonical": {
+      "status": "passed",
+      "pairs": 4488
+    },
+    "train_neg_shape_unique_canonical": {
+      "status": "passed",
+      "pairs": 4488
+    },
+    "val_pos_shape_unique_canonical": {
+      "status": "passed",
+      "pairs": 263
+    },
+    "val_neg_shape_unique_canonical": {
+      "status": "passed",
+      "pairs": 263
+    },
+    "test_pos_shape_unique_canonical": {
+      "status": "passed",
+      "pairs": 527
+    },
+    "test_neg_shape_unique_canonical": {
+      "status": "passed",
+      "pairs": 527
+    },
+    "pos_disjoint": {
+      "status": "passed",
+      "overlap": 0
+    },
+    "neg_disjoint": {
+      "status": "passed",
+      "overlap": 0
+    },
+    "positive_union_negative_exclusion_ratio": {
+      "status": "passed",
+      "full_pairs": 5278,
+      "negative_pairs": 5278
+    },
+    "train_adjacency_reverse_leakage": {
+      "status": "passed",
+      "directed_columns": 8976
+    },
+    "seed_reproducibility": {
+      "status": "passed",
+      "split_hash": "9febb7a31cc7f0362d6c4d39bf7c7a37d6af96a3b9f2ea0f8c7b8630e2cb8c98"
+    },
+    "detect_reverse_validation_in_adjacency": {
+      "status": "passed",
+      "observed": "Adjacency phải đúng train hai chiều; phát hiện leakage"
+    },
+    "detect_negative_heldout_positive": {
+      "status": "passed",
+      "observed": "Negative trùng full positive"
+    }
+  },
+  "input_fingerprints": {
+    "features": "3a607980290f1de036161b9a3965260ca662fc485f7e0dbedbd973e7ea97dd22",
+    "full_pairs": "26e18992954ff41d67a8486ecbf4e38bb0e40f2836502656045cd3e8a600ca00"
+  },
+  "run_id": "20260928T070114_w2_audit_2c83ad20",
+  "config": {
+    "dataset": "Cora",
+    "public_node_split": "public",
+    "seed": 42,
+    "undirected": true,
+    "val_ratio": 0.05,
+    "test_ratio": 0.1,
+    "negative_ratio": 1,
+    "split_id": "cora_lp_v1",
+    "self_loops": "exclude_from_pairs_add_once_per_node_in_layer",
+    "rounding": "floor_val_floor_test_train_remainder"
+  },
+  "config_path": "runs/20260928T070114_w2_audit_2c83ad20/config.json",
+  "environment": {
+    "python": "3.11.9",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "packages": {
+      "torch": "2.14.0+cu132",
+      "torch-geometric": "2.8.0.post1",
+      "numpy": "2.4.6",
+      "scipy": "1.17.1",
+      "scikit-learn": "1.9.1",
+      "matplotlib": "3.11.2",
+      "ipython": "9.17.1",
+      "nbformat": "5.11.1",
+      "nbclient": "0.11.0",
+      "ipykernel": "7.3.0"
+    },
+    "code_revision": "b8710aac95df1178969645a699daaa26edcdbd2e",
+    "dirty_worktree": true,
+    "branch": "feature/gat-link-prediction",
+    "source_hashes": {
+      "notebooks/member_b/week02/01_cora_eda.ipynb": "ed3578485cb2f803e5232f123152f4cbd96fc4e1c19f5627cca154a62a56015c",
+      "notebooks/member_b/week02/02_link_prediction_split.ipynb": "0662e5d6ef29def2737f269c27875af86abed296d4b2569ea867f93a93c6b14f",
+      "notebooks/member_b/week02/03_leakage_audit.ipynb": "c09231d877b0a0d89d5ead9fd60d423a3c42aa16a957e096f38c4569810ac876",
+      "notebooks/member_b/week03/01_cosine_baseline.ipynb": "80bc0c5d061dafd08c946e87e9862249ac5bae26866791c1c09e612dd422b5b2",
+      "notebooks/member_b/week03/02_baseline_analysis.ipynb": "e6dc5ae8948e837ef98d92703b0a1e7bc7c6828c9dd7677e3530d6fa6338b8a3",
+      "notebooks/member_b/week04/01_graph_utilities_and_message_passing.ipynb": "8352888d47157d7b59077f66ae3a75f1410f7fd965245f5447a42aa2b6706904",
+      "notebooks/member_b/week04/02_training_framework_validation.ipynb": "78160f7e3b2b83242cb67790bfedde5bbc2aac27064842db7730e30f18dcadd9",
+      "notebooks/member_b/week04/03_gat_design_and_checkin.ipynb": "0969406a8417292791a919150323f8b40dfa88112f6c02678089ac44280a3d77",
+      "notebooks/shared/graph_ops.ipynb": "5444a06a6dead4fe522b279b6f1aefeb4bbad675648ba05fca7a49a20b02c92a",
+      "notebooks/shared/metrics.ipynb": "78cf4559c43dff0b38013fe4a86af486d3a878f793a043a1fe9a3198ab39e6f1",
+      "notebooks/shared/runtime.ipynb": "d78fb76b1db73f8d51f829582e2089ca21c5e098118403aaa9cf48333e26c176",
+      "notebooks/shared/training.ipynb": "ebfe565fd5f39e2132ba7ac1616422d3468cf3f1733a4f7f3925abc6568b3a70",
+      "configs/cosine_baseline.json": "ad06a2def8207d57f1e3b31fb44f35ffb0faf8a1f618c210201ee2c5f1e9d1b5",
+      "configs/data_protocol.json": "34d8157d344d77eed42e6b794446ba42d22b43a76217f31ce3f755bbb73f86d5",
+      "configs/training_demo.json": "7ef448c1c28393fc56779b5f8603de8da4884b4dd666e7e97b06c078561508fb"
+    },
+    "cuda_available": true
+  },
+  "week": 2,
+  "task": "W2.3",
+  "model": "audit",
+  "dataset": "Cora",
+  "split_id": "cora_lp_v1",
+  "split_hash": "9febb7a31cc7f0362d6c4d39bf7c7a37d6af96a3b9f2ea0f8c7b8630e2cb8c98",
+  "test_value": null
+}

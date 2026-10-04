@@ -19,27 +19,31 @@ coverage.xml
 .mypy_cache/
 .ruff_cache/
 .ipynb_checkpoints/
+**/.ipynb_checkpoints/
 
-# Downloaded datasets (keep an optional directory placeholder)
+# Downloaded datasets
+data/cora/
 /data/*
 !/data/.gitkeep
+!/data/README.md
 
 # Generated model weights and training logs
 *.pt
 *.pth
 *.ckpt
 /checkpoints/
+runs/
 /runs/
 /wandb/
 *.log
 
-# Local secrets; keep shareable environment examples
+# Local secrets
 .env
 .env.*
 !.env.example
 !.env.template
 
-# Local editor and operating-system files
+# Local editor and OS files
 .vscode/
 .idea/
 .DS_Store

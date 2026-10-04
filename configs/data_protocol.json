@@ -1,0 +1,12 @@
+{
+  "dataset": "Cora",
+  "public_node_split": "public",
+  "seed": 42,
+  "undirected": true,
+  "val_ratio": 0.05,
+  "test_ratio": 0.1,
+  "negative_ratio": 1,
+  "split_id": "cora_lp_v1",
+  "self_loops": "exclude_from_pairs_add_once_per_node_in_layer",
+  "rounding": "floor_val_floor_test_train_remainder"
+}
