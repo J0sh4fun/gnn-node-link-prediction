@@ -19,10 +19,8 @@ coverage.xml
 .mypy_cache/
 .ruff_cache/
 .ipynb_checkpoints/
-**/.ipynb_checkpoints/
 
 # Downloaded datasets
-data/cora/
 /data/*
 !/data/.gitkeep
 !/data/README.md
@@ -32,8 +30,8 @@ data/cora/
 *.pth
 *.ckpt
 /checkpoints/
-runs/
 /runs/
+/outputs/
 /wandb/
 *.log
 

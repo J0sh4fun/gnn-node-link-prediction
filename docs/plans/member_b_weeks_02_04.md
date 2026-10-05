@@ -1,5 +1,7 @@
 # KẾ HOẠCH TRIỂN KHAI TUẦN 2–4 — THÀNH VIÊN B
 
+> Cập nhật đường dẫn sau tích hợp: cây thư mục và quy định notebook-only bên dưới là thiết kế lịch sử của nhánh B. Mục 4 và liên kết cụ thể đã cập nhật; dùng [mục lục notebook hiện tại](../../notebooks/README.md) cho cấu trúc theo mục đích và các module Python chuẩn.
+
 **Dự án:** Phân loại nút và dự đoán liên kết trên đồ thị trích dẫn bằng GNN  
 **Phiên bản kế hoạch:** 2.1 — triển khai cá nhân của B, độc lập trước khi merge  
 **Ngày cập nhật:** 28/09/2026  
@@ -168,7 +170,7 @@ Vì vậy, notebook trong `shared/` phải tuân thủ:
 4. Không có phụ thuộc vòng. Notebook tuần nạp trực tiếp các shared notebook cần dùng; shared notebook không gọi ngược notebook tuần.
 5. Không gọi `%run` một notebook thí nghiệm chỉ để lấy một hàm, vì có thể vô tình chạy lại thí nghiệm đó.
 
-Ví dụ sau khi cell bootstrap đã xác định `PROJECT_ROOT`, cell nạp code phải trỏ đến file `PROJECT_ROOT / "notebooks/shared/graph_ops.ipynb"`. Agent chọn cách gọi `%run` tương thích đường dẫn có khoảng trắng trên Windows và kiểm tra thực tế. Không viết đường dẫn máy cá nhân vào repo.
+Sau tích hợp, ví dụ nạp code tương ứng là `from utils.link_graph import canonicalize, bidirectional` sau khi cài editable package. Notebook tham chiếu import nằm tại `notebooks/04_framework_validation/02_graph_ops_imports.ipynb`; không dùng `%run` để import notebook khác. Không viết đường dẫn máy cá nhân vào repo.
 
 | Shared notebook | Nội dung chuẩn | Bắt đầu tạo |
 |---|---|---|
@@ -218,18 +220,18 @@ Mỗi lần chạy lưu môi trường và kết quả thật. `results/experime
 
 ## 4. Danh mục notebook và thứ tự chạy của B
 
-Các đường dẫn trong cột notebook tính từ `notebooks/member_b/`.
+Các đường dẫn hiện tại trong cột notebook tính từ `notebooks/`; ID W2–W4 giữ nguyên để truy vết lịch sử.
 
 | ID | Notebook | Input | Output chính | Trách nhiệm |
 |---|---|---|---|---|
-| W2.1 | `week02/01_cora_eda.ipynb` | Config, dataset tải qua API | EDA summary, figures tuần 2 | B |
-| W2.2 | `week02/02_link_prediction_split.ipynb` | Dataset đã chuẩn hóa, data config | Split NPZ + manifest | B |
-| W2.3 | `week02/03_leakage_audit.ipynb` | Dataset và split đã lưu | Audit JSON, assertions | B và agent kiểm chứng |
-| W3.1 | `week03/01_cosine_baseline.ipynb` | Feature, split, audit, cosine config | Validation metrics và run metadata | B |
-| W3.2 | `week03/02_baseline_analysis.ipynb` | Run kết quả W3.1 | Bảng, figures, kiểm tra lặp lại | B |
-| W4.1 | `week04/01_graph_utilities_and_message_passing.ipynb` | Toy graphs, graph helpers | Kết quả utility/propagate tests | B |
-| W4.2 | `week04/02_training_framework_validation.ipynb` | Toy task, training config | History, checkpoint local, validation checks | B |
-| W4.3 | `week04/03_gat_design_and_checkin.ipynb` | Kết quả W2–W4 | Bảng shape, thiết kế GAT, tổng hợp check-in | B |
+| W2.1 | `01_data_exploration/02_cora_link_prediction_profile.ipynb` | Config, dataset tải qua API | EDA summary, figures tuần 2 | B |
+| W2.2 | `03_link_prediction/01_edge_split.ipynb` | Dataset đã chuẩn hóa, data config | Split NPZ + manifest | B |
+| W2.3 | `03_link_prediction/02_leakage_audit.ipynb` | Dataset và split đã lưu | Audit JSON, assertions | B và agent kiểm chứng |
+| W3.1 | `03_link_prediction/03_cosine_baseline.ipynb` | Feature, split, audit, cosine config | Validation metrics và run metadata | B |
+| W3.2 | `03_link_prediction/04_cosine_analysis.ipynb` | Run kết quả W3.1 | Bảng, figures, kiểm tra lặp lại | B |
+| W4.1 | `04_framework_validation/05_graph_utilities_and_message_passing.ipynb` | Toy graphs, graph helpers | Kết quả utility/propagate tests | B |
+| W4.2 | `04_framework_validation/06_training_framework_validation.ipynb` | Toy task, training config | History, checkpoint local, validation checks | B |
+| W4.3 | `05_model_design/01_gat_design_and_checkin.ipynb` | Kết quả W2–W4 | Bảng shape, thiết kế GAT, tổng hợp check-in | B |
 
 Thứ tự dữ liệu: W2.1 → W2.2 → W2.3 → W3.1 → W3.2. W4.1 và W4.2 độc lập về dữ liệu; W4.3 tổng hợp cuối. Nạp shared notebook nằm ngay trong notebook gọi, không yêu cầu người đọc tự chạy `shared/` theo thứ tự.
 
@@ -241,7 +243,7 @@ Thứ tự dữ liệu: W2.1 → W2.2 → W2.3 → W3.1 → W3.2. W4.1 và W4.2 
 - Tuần 2–4: mỗi tuần một `report/weekNN/member_b.md` và các hình tại `figures/` cùng thư mục.
 - `report/README.md` có bảng tuần, chủ đề, liên kết báo cáo, trạng thái và ngày cập nhật.
 - README gốc liên kết tới kế hoạch, mục lục notebook và mục lục báo cáo.
-- Trong báo cáo tuần 2, notebook EDA được liên kết bằng `../../notebooks/member_b/week02/01_cora_eda.ipynb`; hình bằng `figures/degree_distribution.png`; kết quả bằng `../../results/week02/eda_summary.json`.
+- Trong báo cáo tuần 2, notebook EDA được liên kết bằng `../../notebooks/01_data_exploration/02_cora_link_prediction_profile.ipynb`; hình bằng `figures/degree_distribution.png`; kết quả bằng `../../results/week02/eda_summary.json`.
 
 ### 5.2. Mẫu bắt buộc tại `report/templates/weekly_report.md`
 
