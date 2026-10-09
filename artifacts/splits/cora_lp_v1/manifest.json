@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "split_id": "cora_lp_v1",
+  "seed": 42,
+  "ratios": {
+    "train": 0.85,
+    "val": 0.05,
+    "test": 0.1
+  },
+  "rounding": "floor_val_floor_test_train_remainder",
+  "negative_ratio": 1,
+  "num_nodes": 2708,
+  "config": {
+    "dataset": "Cora",
+    "public_node_split": "public",
+    "seed": 42,
+    "undirected": true,
+    "val_ratio": 0.05,
+    "test_ratio": 0.1,
+    "negative_ratio": 1,
+    "split_id": "cora_lp_v1",
+    "self_loops": "exclude_from_pairs_add_once_per_node_in_layer",
+    "rounding": "floor_val_floor_test_train_remainder"
+  },
+  "counts": {
+    "train_pos": 4488,
+    "train_neg": 4488,
+    "val_pos": 263,
+    "val_neg": 263,
+    "test_pos": 527,
+    "test_neg": 527
+  },
+  "input_fingerprints": {
+    "features": "3a607980290f1de036161b9a3965260ca662fc485f7e0dbedbd973e7ea97dd22",
+    "full_pairs": "26e18992954ff41d67a8486ecbf4e38bb0e40f2836502656045cd3e8a600ca00"
+  },
+  "array_hashes": {
+    "train_pos": "024a153180126640610e01fb641a834b6a01c96e077398d049fe50e1eb35415b",
+    "train_neg": "03075426645a9903b6935923230255294fe9cfa0b46a44652b69e538783849ee",
+    "val_pos": "594f964e1c2e1cede997badda05a44de7ab9abc82a27d8f3697b73710ea41c07",
+    "val_neg": "9c9a34e3270444af6b004b8cc23a9659892ec34cd654cce0a1e1986cd2ae67ee",
+    "test_pos": "a6ad15237d2e61972282c6e3f79ebeccbeb50d9a094895037343d42a41be0014",
+    "test_neg": "eb325bf608e67481909b6f7d9364825779ad823e4e3365053400a87e9497de7d"
+  },
+  "split_hash": "9febb7a31cc7f0362d6c4d39bf7c7a37d6af96a3b9f2ea0f8c7b8630e2cb8c98",
+  "dataset": {
+    "name": "Cora",
+    "loader": "PyG Planetoid public",
+    "node_order": "unchanged"
+  },
+  "environment": {
+    "python": "3.11.9",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "packages": {
+      "torch": "2.14.0+cu132",
+      "torch-geometric": "2.8.0.post1",
+      "numpy": "2.4.6",
+      "scipy": "1.17.1",
+      "scikit-learn": "1.9.1",
+      "matplotlib": "3.11.2",
+      "ipython": "9.17.1",
+      "nbformat": "5.11.1",
+      "nbclient": "0.11.0",
+      "ipykernel": "7.3.0"
+    },
+    "code_revision": "b8710aac95df1178969645a699daaa26edcdbd2e",
+    "dirty_worktree": true,
+    "branch": "feature/gat-link-prediction",
+    "source_hashes": {
+      "notebooks/member_b/week02/01_cora_eda.ipynb": "ed3578485cb2f803e5232f123152f4cbd96fc4e1c19f5627cca154a62a56015c",
+      "notebooks/member_b/week02/02_link_prediction_split.ipynb": "4ad7a843d83adce0adbe0e445e3d965ab96efcf567103e5288b749e2d36b882f",
+      "notebooks/member_b/week02/03_leakage_audit.ipynb": "3a276756adee6aedfc0799ad3e3be8b2e8095282a7ecb30fb9b45b0850481e07",
+      "notebooks/member_b/week03/01_cosine_baseline.ipynb": "73972e17a5447b99b4dc5f35fe0fd4e1b4d3be15c4484c547eb36eea635b3b61",
+      "notebooks/member_b/week03/02_baseline_analysis.ipynb": "9e815ca6060628dbbaa3a1c7a11f5682361be61f176d40c8fde937931e85887c",
+      "notebooks/member_b/week04/01_graph_utilities_and_message_passing.ipynb": "abdd810efd98c684885387aac5ab974a858f37c960ee0e24e56262e793b283ce",
+      "notebooks/member_b/week04/02_training_framework_validation.ipynb": "19bb05384fd0b91f08e03da81961cdf04afd2c65ff56a498fcec737ae521a435",
+      "notebooks/member_b/week04/03_gat_design_and_checkin.ipynb": "cf5edc53466d8d1a5589f5f76b6b5d077506a437d2c559800c7f769fa03cc380",
+      "notebooks/shared/graph_ops.ipynb": "5444a06a6dead4fe522b279b6f1aefeb4bbad675648ba05fca7a49a20b02c92a",
+      "notebooks/shared/metrics.ipynb": "78cf4559c43dff0b38013fe4a86af486d3a878f793a043a1fe9a3198ab39e6f1",
+      "notebooks/shared/runtime.ipynb": "d78fb76b1db73f8d51f829582e2089ca21c5e098118403aaa9cf48333e26c176",
+      "notebooks/shared/training.ipynb": "ebfe565fd5f39e2132ba7ac1616422d3468cf3f1733a4f7f3925abc6568b3a70",
+      "configs/cosine_baseline.json": "ad06a2def8207d57f1e3b31fb44f35ffb0faf8a1f618c210201ee2c5f1e9d1b5",
+      "configs/data_protocol.json": "34d8157d344d77eed42e6b794446ba42d22b43a76217f31ce3f755bbb73f86d5",
+      "configs/training_demo.json": "7ef448c1c28393fc56779b5f8603de8da4884b4dd666e7e97b06c078561508fb"
+    },
+    "cuda_available": true
+  },
+  "creator_notebook": "notebooks/member_b/week02/02_link_prediction_split.ipynb",
+  "run_id": "20260928T065735_w2_split_66363bd1"
+}

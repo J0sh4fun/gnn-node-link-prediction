@@ -1,7 +1,7 @@
 """Train the Cora MLP baseline with validation-only checkpoint selection.
 
-Run ``python train/train_mlp.py`` from the repository root, or execute this
-file by its absolute path from any directory. All artifacts are resolved
+After editable installation, run ``python -m scripts.mlp_baseline``.
+The legacy ``python train/train_mlp.py`` entry point is also retained. All artifacts are resolved
 relative to the repository. Each invocation performs one final test evaluation;
 do not use its test metrics to select hyperparameters or seeds.
 """
@@ -11,15 +11,12 @@ from __future__ import annotations
 import json
 import math
 import random
-import sys
 from copy import deepcopy
 from dataclasses import dataclass
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-if __package__ in (None, ""):
-    sys.path.insert(0, str(REPO_ROOT))
 
 import numpy as np
 import torch

@@ -20,9 +20,10 @@ coverage.xml
 .ruff_cache/
 .ipynb_checkpoints/
 
-# Downloaded datasets (keep an optional directory placeholder)
+# Downloaded datasets
 /data/*
 !/data/.gitkeep
+!/data/README.md
 
 # Generated model weights and training logs
 *.pt
@@ -30,16 +31,17 @@ coverage.xml
 *.ckpt
 /checkpoints/
 /runs/
+/outputs/
 /wandb/
 *.log
 
-# Local secrets; keep shareable environment examples
+# Local secrets
 .env
 .env.*
 !.env.example
 !.env.template
 
-# Local editor and operating-system files
+# Local editor and OS files
 .vscode/
 .idea/
 .DS_Store
