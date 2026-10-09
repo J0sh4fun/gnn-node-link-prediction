@@ -6,5 +6,6 @@
 | 2 | Cora, LP split, leakage | [member_b.md](week02/member_b.md) | Notebook/audit đã chạy; chờ B tự review |
 | 3 | Cosine validation | [member_b.md](week03/member_b.md) | Hai run đã đối chiếu; chờ B tự review |
 | 4 | Utilities, prototype, check-in | [member_b.md](week04/member_b.md) | Toy checks đã chạy; chờ B tự review |
+| 6 | GAT Layer triển khai sớm | [gat_layer_self_check.md](week06/gat_layer_self_check.md) | 22 kiểm tra GAT và toàn bộ suite đạt; chạy trước lịch Tuần 6 |
 
-Cập nhật: 2026-09-28. Trạng thái được sửa theo kết quả chạy notebook, không theo kế hoạch dự kiến.
+Cập nhật: 2026-10-09. Trạng thái được sửa theo kết quả chạy kiểm tra, không theo kế hoạch dự kiến.
