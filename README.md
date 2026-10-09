@@ -18,7 +18,6 @@ compatibility decisions, unresolved issues and verification limits.
 ├── requirements.txt / environment.yml / pytest.ini
 ├── configs/                      # Existing LP protocol, cosine and toy-training config
 ├── models/mlp.py                 # Complete feature-only baseline
-├── models/gat_layer.py           # Hand-written sparse multi-head GAT layer
 ├── layers/projected_sum.py       # Existing Week 4 MessagePassing prototype
 ├── train/
 │   ├── train_mlp.py              # Fixed MLP fitting and legacy entry point
@@ -32,7 +31,7 @@ compatibility decisions, unresolved issues and verification limits.
 │   ├── graph_ops.py              # Torch sparse symmetric normalization / SpMM
 │   ├── link_graph.py             # NumPy edges, split/sampling, leakage audit
 │   ├── link_metrics.py           # Raw-float64 cosine and ROC-AUC/AP
-│   ├── attention.py              # Stable receiver-wise grouped softmax
+│   ├── attention.py              # Existing receiver-wise toy softmax
 │   ├── experiment.py             # Run hashes, seed and publication helpers
 │   └── paths.py                  # Checkout, cache and output preflight
 ├── scripts/                     # Thin CLIs: mlp_baseline, cosine_baseline, smoke
