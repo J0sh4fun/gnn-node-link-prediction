@@ -1,5 +1,7 @@
 # Tuần 4 — Kiến trúc framework huấn luyện và GCN sparse
 
+> Cập nhật tuần 5 (2026-10-09): GCNLayer đã được triển khai bằng MessagePassing theo yêu cầu hiện tại. Đề xuất nn.Module + sparse_spmm và models/gcn.py trong Mục 4 là lộ trình lịch sử, được thay thế bởi models/gcn_layer.py. Xem [bàn giao tuần 5](../../report/week05/member_a.md) để biết API và kết quả kiểm thử.
+
 **Phụ trách:** Thành viên A. **Phạm vi:** hạ tầng node classification đã kiểm chứng trong Tuần 4 và kế hoạch triển khai GCN tự cài đặt ở Tuần 5.
 
 Tài liệu mô tả [trainer](../../train/trainer.py), [các phép toán đồ thị](../../utils/graph_ops.py), [kiểm thử graph operations](../../tests/test_graph_ops.py) và [API đánh giá](../../utils/evaluate.py) hiện có. Bản bàn giao Tuần 4 ghi nhận kiểm chứng thành công, độ bao phủ kiểm thử graph operations đạt 100% và gradient đã được xác minh. Đây là trạng thái do nhóm cung cấp, không phải kết quả đo coverage mới; một tỷ lệ coverage chưa xác định loại đo cũng không đồng nghĩa đã đạt đồng thời statement coverage và branch coverage. Lộ trình dưới đây là công việc dự kiến, không phải một mô hình GCN đã hoàn thành.

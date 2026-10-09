@@ -3,7 +3,7 @@
 Phase 1 (Weeks 1–4) provides the feature-only MLP baseline, fixed link splits,
 cosine validation baseline, sparse graph operations and training utilities.
 Member A owns node classification/GCN; Member B owns link prediction/GAT.
-Complete GCN/GAT models remain Phase 2 work.
+Week 5 GCNLayer is implemented; complete GCN/GAT networks remain Phase 2 work.
 
 Requirements: [Plan_GNN.md](Plan_GNN.md) links to the unchanged integrated plan.
 See [cleanup and handoff](docs/phase1_cleanup.md) for semantic comparisons,
@@ -222,8 +222,23 @@ remain **0.812170 / 0.824801**. These are different tasks/metrics, not directly
 comparable. The temporary cosine validation smoke reproduced those values;
 the full MLP experiment and its held-out test evaluation were not rerun.
 
-Use these existing interfaces to implement Phase 2 GCN/GAT separately. Resolve
-the missing planned A `MessagePassingLayer` versus the documented sparse-SpMM
-design first. Working LP metrics are in `utils.link_metrics.lp_metrics`;
+Use these existing interfaces to implement Phase 2 GCN/GAT separately. The
+Week 5 GCNLayer now inherits PyG MessagePassing directly; it supersedes the sparse-SpMM
+layer proposal. Working LP metrics are in `utils.link_metrics.lp_metrics`;
 the old tensor `evaluate_link_prediction` stub remains intentionally
 unimplemented. See [handoff notes](docs/phase1_cleanup.md) for untouched issues.
+
+## Week 5 GCN layer
+
+`from models import GCNLayer` exposes `GCNLayer(in_channels, out_channels, bias=True)`.
+Call `layer(x, edge_index, edge_weight=None)` with raw undirected edges.
+Self-loops precede symmetric normalization; message passing uses sparse edges
+and bias is added after aggregation. Activation/dropout belong to the enclosing
+network. Normalization is recomputed for each call, including changed LP graphs.
+
+See [the Week 5 handoff](report/week05/member_a.md) for the input contract,
+acceptance results and pending human review. Run the focused checks with:
+
+```powershell
+.venv/Scripts/python.exe -m pytest tests/test_gcn_layer.py tests/test_graph_ops.py tests/test_trainer.py -q -s
+```

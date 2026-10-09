@@ -1,5 +1,7 @@
 # Week 4 — Training framework and sparse GCN architecture
 
+> Week 5 update (2026-10-09): GCNLayer now uses MessagePassing as requested. The nn.Module + sparse_spmm and models/gcn.py proposal in Section 4 is historical and superseded by models/gcn_layer.py. See the [Week 5 handoff](../../report/week05/member_a.md) for the implemented API and verification results.
+
 **Owner:** Member A. **Scope:** the verified Week 4 node-classification infrastructure and the Week 5 custom GCN implementation plan.
 
 This document describes the current [trainer](../../train/trainer.py), [graph operations](../../utils/graph_ops.py), [graph-operation tests](../../tests/test_graph_ops.py), and [evaluation API](../../utils/evaluate.py). The Week 4 handoff reports successful verification, 100% graph-operations test coverage, and verified gradients. That status is recorded as supplied by the team; it is not a new coverage measurement, nor does an unspecified coverage percentage establish both statement and branch coverage. The roadmap below is proposed work, not an already implemented GCN.
