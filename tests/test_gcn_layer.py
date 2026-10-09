@@ -15,8 +15,10 @@ def deterministic_cpu():
     with torch.random.fork_rng():
         torch.manual_seed(42)
         torch.set_num_threads(1)
-        yield
-    torch.set_num_threads(previous_threads)
+        try:
+            yield
+        finally:
+            torch.set_num_threads(previous_threads)
 
 
 @pytest.mark.parametrize("dtype", [torch.float32, torch.float64])
@@ -28,7 +30,10 @@ def test_matches_pyg_output_and_gradients(dtype, bias, weighted):
     raw_weights = torch.tensor([2., 2., 0.5, 0.5, 3., 3., 1.5], dtype=dtype)
     raw_weights = raw_weights if weighted else None
     layer = GCNLayer(3, 2, bias=bias).to(dtype)
-    reference = GCNConv(3, 2, bias=bias, cached=False).to(dtype)
+    reference = GCNConv(
+        3, 2, bias=bias, cached=False, improved=False,
+        add_self_loops=True, normalize=True, flow="source_to_target",
+    ).to(dtype)
     with torch.no_grad():
         reference.lin.weight.copy_(layer.weight.t())
         if bias:
@@ -144,6 +149,93 @@ def test_invalid_inputs_fail_clearly(case):
         weights = torch.ones(2, dtype=torch.float64)
     with pytest.raises(ValueError):
         layer(x, edges, weights)
+
+
+def test_gradients_match_finite_differences():
+    """Check input and learned-parameter derivatives without a PyG oracle."""
+    layer = GCNLayer(2, 2).double()
+    edges = torch.tensor([[0, 1, 1, 2], [1, 0, 2, 1]])
+    x = torch.randn(4, 2, dtype=torch.float64, requires_grad=True)
+
+    def forward(features, weight, bias):
+        return torch.func.functional_call(
+            layer, {"weight": weight, "bias": bias}, (features, edges)
+        )
+
+    assert torch.autograd.gradcheck(
+        forward, (x, layer.weight, layer.bias), eps=1e-6, atol=1e-5, rtol=1e-3
+    )
+
+
+def test_node_relabeling_and_edge_order_preserve_results():
+    """Node IDs and storage order must not change the represented graph operator."""
+    layer = GCNLayer(3, 2).double()
+    x = torch.randn(5, 3, dtype=torch.float64)
+    edges = torch.tensor([[0, 1, 1, 2, 1, 3], [1, 0, 2, 1, 3, 1]])
+    weights = torch.tensor([2., 2., 0.5, 0.5, 3., 3.], dtype=x.dtype)
+    expected = layer(x, edges, weights)
+    # Mapping from old node ID to new node ID, including the isolated node.
+    relabel = torch.tensor([2, 4, 0, 3, 1])
+    reordered_x = torch.empty_like(x)
+    reordered_x[relabel] = x
+    edge_order = torch.tensor([5, 2, 0, 4, 1, 3])
+    actual = layer(
+        reordered_x, relabel[edges[:, edge_order]], weights[edge_order]
+    )
+    torch.testing.assert_close(actual[relabel], expected, rtol=1e-12, atol=1e-12)
+
+
+def test_changed_raw_weights_recompute_normalization():
+    """Reusing an edge/weight tensor after an update must not reuse old degrees."""
+    layer = GCNLayer(1, 1, bias=False).double()
+    with torch.no_grad():
+        layer.weight.fill_(1.)
+    x = torch.tensor([[2.], [6.]], dtype=torch.float64)
+    edges = torch.tensor([[0, 1], [1, 0]])
+    weights = torch.ones(2, dtype=x.dtype)
+    torch.testing.assert_close(layer(x, edges, weights), x.new_tensor([[4.], [4.]]))
+    weights.fill_(3.)
+    # New degree four: a unit self-loop and an edge with weight three.
+    torch.testing.assert_close(layer(x, edges, weights), x.new_tensor([[5.], [3.]]))
+    assert torch.equal(weights, x.new_tensor([3., 3.]))
+
+
+@pytest.mark.parametrize("weighted", [False, True])
+def test_parallel_non_loop_edges_count_additively(weighted):
+    layer = GCNLayer(1, 1, bias=False).double()
+    with torch.no_grad():
+        layer.weight.fill_(1.)
+    x = torch.tensor([[2.], [6.], [9.]], dtype=torch.float64)
+    edges = torch.tensor([[0, 0, 1, 1], [1, 1, 0, 0]])
+    weights = x.new_tensor([0.5, 1.5, 0.5, 1.5]) if weighted else None
+    # Two units of total weight in each direction, plus unit self-loops.
+    expected = x.new_tensor([[14 / 3], [10 / 3], [9.]])
+    torch.testing.assert_close(layer(x, edges, weights), expected)
+
+
+def test_message_passing_uses_source_to_target_flow():
+    """Probe the message hook directly; symmetric graphs alone cannot detect reversal.
+
+    This is a directed diagnostic of propagate(), not a directed-graph contract
+    for forward(). The supplied coefficients are fixed for this hook test.
+    """
+    layer = GCNLayer(1, 1, bias=False)
+    support = torch.tensor([[2.], [5.], [11.]])
+    edges = torch.tensor([[0, 2], [1, 1]])
+    actual = layer.propagate(
+        edges, x=support, norm=torch.tensor([0.5, 0.25]), size=(3, 3)
+    )
+    torch.testing.assert_close(actual, torch.tensor([[0.], [3.75], [0.]]))
+
+
+@pytest.mark.parametrize("bad_weight", [float("nan"), float("inf"), float("-inf")])
+def test_nonfinite_raw_weights_are_rejected(bad_weight):
+    layer = GCNLayer(2, 2)
+    with pytest.raises(ValueError, match="finite"):
+        layer(
+            torch.ones(2, 2), torch.tensor([[0, 1], [1, 0]]),
+            torch.tensor([bad_weight, bad_weight]),
+        )
 
 
 def test_overfits_thirty_connected_nodes():

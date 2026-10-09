@@ -71,6 +71,10 @@ kết quả Cora hoặc bằng chứng chất lượng tổng quát. Chưa đán
 
 ## Review và bước tiếp theo
 
+Bản kiểm chứng mới cho phần việc B đã được ghi trong
+[báo cáo B](member_b.md), kèm log thực thi và các test bổ sung.
+Đây là kiểm chứng do Codex hỗ trợ; trạng thái B review trực tiếp vẫn chờ xác nhận.
+
 - [x] Code, kiểm thử và hướng dẫn đã sẵn sàng để B review.
 - [ ] B review độc lập giao diện, quy ước self-loop và phép so sánh GCNConv.
 - [ ] Nhóm phê duyệt trước khi merge vào main.
