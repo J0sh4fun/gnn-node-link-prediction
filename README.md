@@ -5,7 +5,14 @@ cosine validation baseline, sparse graph operations and training utilities.
 Member A owns node classification/GCN; Member B owns link prediction/GAT.
 Complete GCN/GAT models remain Phase 2 work.
 
-Requirements: [Plan_GNN.md](Plan_GNN.md) links to the unchanged integrated plan.
+Requirements: [Plan_GNN.md](Plan_GNN.md) links to the integrated plan.
+Member A: [implementation plan](docs/plans/member_a_plan.md) and
+[progress checklist](docs/plans/member_a_todo.md), including task-level commit,
+push and pull request workflow into `main`.
+The 2026-10-15 ownership update assigns all Week 5 GCN work to A and all
+Week 6 GAT work to B, including tests and acceptance, without cross-member
+tasks in those weeks. See the [Week 5 progress review](report/week05/progress_review.md)
+and [B's Week 6 checklist](docs/plans/member_b_week06_todo.md).
 See [cleanup and handoff](docs/phase1_cleanup.md) for semantic comparisons,
 compatibility decisions, unresolved issues and verification limits.
 
