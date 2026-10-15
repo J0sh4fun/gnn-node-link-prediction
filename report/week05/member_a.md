@@ -2,6 +2,21 @@
 
 Ngày: 2026-10-09. Nhánh: `feature/gcn`.
 
+## Cập nhật phân công và nghiệm thu — 2026-10-15
+
+Theo điều chỉnh của người dùng, **A chịu trách nhiệm toàn bộ tuần 5**: cài đặt,
+kiểm thử, tự kiểm tra sáu Acceptance Criteria, báo cáo và chuẩn bị PR.
+Không có task hoặc điều kiện chờ B ở tuần này. Tuần 6 do B tự thực hiện toàn bộ
+GATLayer, kiểm thử và benchmark; A không có task tuần 6.
+
+Đã chạy lại trên implementation `35a5d01a47f292c66ed96c96f175fdd05329515b`:
+`pytest tests/test_gcn_layer.py tests/test_graph_ops.py tests/test_trainer.py -q -s`.
+Kết quả mới: **66 passed in 17.15s**, exit code 0; 29 test GCN và 37 test
+utility/trainer. Sanity loss **1.067625 → 0.025040**, accuracy **100%** trên
+30 node tổng hợp. Tuần 5 đạt **6/6 tiêu chí kỹ thuật**; còn bước tích hợp PR
+vào `main`, không phụ thuộc B. Log gốc của lần chạy này nằm ở
+`runs/week05-a-audit/`; bản bằng chứng được lưu cùng PR cập nhật kế hoạch.
+
 ## Kết quả bàn giao
 
 Đã triển khai [GCNLayer](../../models/gcn_layer.py) bằng
@@ -15,7 +30,7 @@ Repo tuần 4 có `ProjectedSum` làm primitive thử nghiệm; chưa có lớp 
 đề xuất `nn.Module + sparse_spmm` trong lộ trình cũ ở tài liệu tuần 4.
 Mạng GCN hai tầng và thực nghiệm Cora chính thức thuộc tuần 7.
 
-## Giao diện bàn giao cho B
+## Giao diện GCNLayer
 
 ```python
 from models import GCNLayer
@@ -69,17 +84,15 @@ seed 42, Adam lr=0.05, 100 epoch. Loss từ **1.067625 → 0.025040**;
 accuracy trên tập thử **100%**. Đây là kiểm tra khả năng học, không phải
 kết quả Cora hoặc bằng chứng chất lượng tổng quát. Chưa đánh giá Cora test set.
 
-## Review và bước tiếp theo
+## Nghiệm thu và bước tiếp theo
 
-Bản kiểm chứng mới cho phần việc B đã được ghi trong
-[báo cáo B](member_b.md), kèm log thực thi và các test bổ sung.
-Đây là kiểm chứng do Codex hỗ trợ; trạng thái B review trực tiếp vẫn chờ xác nhận.
+- [x] Implementation, kiểm thử và tài liệu API đầy đủ.
+- [x] Kiểm tra lại sáu Acceptance Criteria bằng lần chạy mới ngày 2026-10-15.
+- [x] Ghi rõ quyết định kế thừa MessagePassing và quy ước self-loop.
+- [ ] Tích hợp code qua PR vào main theo quy trình GitHub của repo.
 
-- [x] Code, kiểm thử và hướng dẫn đã sẵn sàng để B review.
-- [ ] B review độc lập giao diện, quy ước self-loop và phép so sánh GCNConv.
-- [ ] Nhóm phê duyệt trước khi merge vào main.
-
-Các test được bổ sung trong lần triển khai này; không ghi nhận là B đã viết
-hoặc đã review. Không gửi thông báo hoặc xuất bản PR trong lần bàn giao này.
-Tuần 7 ghép mạng hai tầng, dùng cùng cạnh thô cho từng tầng và trainer hiện có;
-chỉ dùng validation để chọn mô hình.
+[Báo cáo kiểm chứng cũ](member_b.md) và log mang tên member_b được giữ làm
+lịch sử bằng chứng; không còn là phân công hoặc yêu cầu B xác nhận tuần 5.
+Kiểm chứng do Codex thực hiện theo yêu cầu người dùng, không khẳng định một
+thành viên đã tự chạy hoặc phê duyệt. Tuần 7 mới ghép mạng hai tầng và chạy
+NC Cora; việc đó không chặn hoàn tất layer tuần 5.

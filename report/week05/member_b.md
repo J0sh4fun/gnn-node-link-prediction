@@ -1,5 +1,12 @@
 # Tuần 5 — Thành viên B: kiểm chứng GCNLayer
 
+> Lưu trữ lịch sử — cập nhật 2026-10-15: phân công dưới đây đã được thay thế.
+> A chịu trách nhiệm toàn bộ tuần 5, bao gồm kiểm thử và nghiệm thu; không
+> cần B tham gia hoặc xác nhận. Tuần 6 thuộc toàn bộ B, không giao việc cho A.
+> Giữ nguyên phần dưới để bảo toàn nguồn gốc lần kiểm chứng cũ; các checkbox
+> B review/nhóm phê duyệt trong phần lịch sử không còn là blocker tuần 5.
+> Xem [báo cáo A hiện hành](member_a.md).
+
 Ngày: 2026-10-09. Nhánh: `feature/gcn`.
 Implementation được review: `ff878c8d1817e67faba5e8d6da64d43abd325ba9`.
 Các bổ sung kiểm thử nằm trong cùng bản bàn giao với báo cáo này.
