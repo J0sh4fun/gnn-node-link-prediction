@@ -5,17 +5,17 @@ Theo dõi công việc tại [todo của A](member_a_todo.md).
 
 ## Phạm vi và hiện trạng
 
-A chịu trách nhiệm chính cho `GCNLayer` tự cài đặt và pipeline Node Classification (NC); review GAT của B; hỗ trợ embedding, đánh giá Link Prediction (LP); thực hiện một nửa phần việc chung về dữ liệu, thực nghiệm, báo cáo và slide. Cora là bắt buộc; Citeseer/Pubmed chỉ làm khi các deliverable Cora đã đủ.
+A chịu trách nhiệm toàn bộ tuần 5: `GCNLayer`, kiểm thử, tự nghiệm thu, báo cáo và PR; phụ trách chính pipeline Node Classification (NC), hỗ trợ embedding/đánh giá Link Prediction (LP) và một nửa phần việc chung. Tuần 6 do B thực hiện toàn bộ GATLayer, kiểm thử và benchmark; không có task của A hoặc yêu cầu A xác nhận. Cora là bắt buộc; Citeseer/Pubmed chỉ làm khi các deliverable Cora đã đủ.
 
 Tuần trong tài liệu là tuần tương đối của kế hoạch gốc, không suy ra ngày bắt đầu hoặc deadline mới từ ngày lập. Cập nhật tiến độ dựa trên artifact và review thực tế.
 
 | Phần việc | Bằng chứng hiện có | Cách xử lý tiếp theo |
 |---|---|---|
 | Tuần 1–4 | [Lý thuyết GCN](../../report/GCN_Spectral_to_Formula_vi.md), [loader](../../utils/data_loader.py), [MLP](../../models/mlp.py), [phân tích baseline](../experiments/week3_rq1_analysis_vi.md), [framework](../architecture/week4_framework_vi.md), [bàn giao nền tảng](../phase1_cleanup.md) đã có trong `main` | Tái sử dụng; không chạy lại test set MLP để kiểm tra kế hoạch |
-| Tuần 5 | [Implementation và báo cáo A tại commit ff878c8d](https://github.com/J0sh4fun/gnn-node-link-prediction/tree/ff878c8d1817e67faba5e8d6da64d43abd325ba9), [kiểm chứng bổ sung tại commit 35a5d01a](https://github.com/J0sh4fun/gnn-node-link-prediction/tree/35a5d01a47f292c66ed96c96f175fdd05329515b) trên `feature/gcn` | Đã có code và bằng chứng kiểm thử; còn chờ B review trực tiếp và merge vào `main` |
+| Tuần 5 | [Implementation và kiểm thử tại commit 35a5d01a](https://github.com/J0sh4fun/gnn-node-link-prediction/tree/35a5d01a47f292c66ed96c96f175fdd05329515b); [kiểm tra tiến độ mới](../../report/week05/progress_review.md) | Kỹ thuật hoàn tất: 66 tests pass, đạt 6/6 tiêu chí; A chuẩn bị tích hợp PR, không chờ B |
 | Tuần 6–12 | Chưa có bằng chứng hoàn tất trong bản kế hoạch này | Giữ To do; xác minh đầu vào trước khi chuyển Doing |
 
-Đây là kế hoạch và đối chiếu tài liệu/code đã lưu, không phải lần chạy xác minh thực nghiệm mới. Kết quả kiểm thử lịch sử và review do Codex hỗ trợ không thay cho phê duyệt trực tiếp của B.
+Đã kiểm tra lại tuần 5 ngày 2026-10-15 bằng test trên graph tổng hợp; không chạy benchmark Cora/test set. Xem báo cáo tiến độ để phân biệt kết quả kỹ thuật và trạng thái merge. Việc tự nghiệm thu thuộc A; kiểm chứng do Codex thực hiện không được ghi thành phê duyệt cá nhân.
 
 ## Lộ trình và tiêu chí nghiệm thu
 
@@ -25,8 +25,8 @@ Tuần trong tài liệu là tuần tương đối của kế hoạch gốc, kh�
 | 2 | A02 | Load Cora, chuẩn hóa đặc trưng, EDA và public masks cho NC | Loader có test; masks 140/500/1000 tách biệt; graph vô hướng; README ghi convention; EDA lưu số nút/cạnh/nhãn/đặc trưng | Chia đều phần EDA chung; B giữ pipeline split LP |
 | 3 | A03 | Baseline MLP chỉ dùng đặc trưng; Accuracy và Macro-F1 | Có config, log, checkpoint chọn bằng validation và bảng baseline; bảo toàn kết quả final lịch sử | RQ1; phối hợp API đánh giá với B |
 | 4 | A04, A05 | Trainer tái sử dụng, seed/logging/checkpoint; utility chuẩn hóa sparse; review chéo | Train loss chỉ dùng train mask; early stopping theo validation; khôi phục best checkpoint; schema tracking đủ trường; demo check-in 1 | Hợp nhất self-loop/edge conventions với B |
-| 5 | A06, A07 | Bàn giao GCNLayer, xử lý góp ý review và tích hợp `main` | Đạt đủ 6 Acceptance Criteria bên dưới; B tự xác nhận review; PR code merge được | Implementation đã có trên `feature/gcn`; B phụ trách kiểm thử GCN |
-| 6 | A08, A09 | Review GATLayer của B; viết test acceptance và benchmark tốc độ | Cùng weight/cấu hình với GATConv; kiểm tra output/gradient, concat/average head, attention theo node nhận, self-loop; báo cáo thời gian cùng graph/device/dtype | Chờ GAT của B; `main` hiện chưa có GATLayer hoàn chỉnh |
+| 5 | A06, A07 | A tự thực hiện GCNLayer, unit test, nghiệm thu, báo cáo và PR | Đủ 6 Acceptance Criteria; log 66 tests pass; API/thiết kế rõ; PR sẵn sàng tích hợp | Không có task hoặc điều kiện chờ B; theo dõi merge riêng |
+| 6 | Không có task A | B tự thực hiện GATLayer, unit test và benchmark | [Checklist tuần 6 của B](member_b_week06_todo.md); B tự nghiệm thu và chuẩn bị PR | A08/A09 cũ được chuyển sang B06-02/B06-03, không tính vào tiến độ A |
 | 7 | A10–A12 | Ghép riêng mạng GCN hai tầng và GAT hai tầng; chạy NC trên Cora | Hai mạng độc lập, logits `[N, C]`; dùng trainer hiện có; lưu validation/config/checkpoint; so sánh sơ bộ MLP/GCN/GAT phục vụ RQ1/RQ2 | GCN/GAT qua acceptance; B hỗ trợ debug |
 | 8 | A13, A14 | Tuning GCN; nhận cấu hình GAT đã tuning từ B; chốt final NC | Search space/budget/seed được ghi trước; chọn bằng validation; final test một lần cho mỗi mô hình/cấu hình đã chốt; đủ bảng Accuracy/Macro-F1 | GAT tuning do B chính; check-in 2 |
 | 9 | A15, A16 | Hỗ trợ encoder embedding và hoàn thiện API ROC-AUC/AP dùng chung | Hợp đồng embedding nhất quán, mặc định không thêm L2-normalization khi chưa có quyết định; adapter tương thích `utils.link_metrics.lp_metrics`; audit không leakage trước run chính | B sở hữu train LP, decoder và `train/retrain_final.py` |
@@ -37,7 +37,7 @@ Tuần trong tài liệu là tuần tương đối của kế hoạch gốc, kh�
 ## Các ràng buộc kỹ thuật
 
 - GCN dùng `torch_geometric.nn.MessagePassing`, tự viết `forward()` và `message()`, chuẩn hóa theo cạnh sparse; thêm self-loop trước khi tính degree. Không tạo adjacency dense N×N. `GCNConv`/`GATConv` chỉ dùng làm đối chứng kiểm thử.
-- Thiết kế tuần 4 về `nn.Module + sparse_spmm` là lịch sử. Implementation GCN tuần 5 kế thừa trực tiếp `MessagePassing` và tái sử dụng `utils.graph_ops`; không tạo thêm base class chỉ để khớp tên trong kế hoạch gốc. B review và ghi nhận quyết định này trước merge code.
+- Thiết kế tuần 4 về `nn.Module + sparse_spmm` là lịch sử. Implementation GCN tuần 5 kế thừa trực tiếp `MessagePassing` và tái sử dụng `utils.graph_ops`; không tạo thêm base class chỉ để khớp tên trong kế hoạch gốc. A ghi nhận quyết định và tự kiểm tra trong nghiệm thu tuần 5.
 - GCNLayer nhận cạnh thô; activation/dropout thuộc mạng bao ngoài. Không đưa hệ số đã chuẩn hóa vào layer lần nữa. Mạng GCN và mạng GAT huấn luyện riêng.
 - Đồ thị vô hướng nhất quán cho NC và LP. NC transductive được dùng toàn bộ topology/đặc trưng, nhưng supervised loss chỉ thấy nhãn train; tuyệt đối không dùng điểm test để chọn mô hình.
 - LP tuning chỉ message passing trên train edges; negative sampling loại trừ toàn bộ positive gốc, không trùng giữa splits, tỷ lệ 1:1. Giữ nguyên saved split. Final LP do B retrain từ đầu trên train+val edges với cấu hình và lịch huấn luyện đã chốt, rồi đánh giá test một lần theo Mục 3.3.
@@ -63,15 +63,15 @@ Metric NC: Accuracy và Macro-F1; LP: ROC-AUC và AP. Benchmark tham khảo khô
 6. Sửa góp ý bằng commit mới và push vào cùng PR. Ghi URL PR trong todo sau khi có URL; không tạo commit chỉ để tự ghi hash của chính nó.
 7. Chuyển **Done** và đánh dấu checkbox khi review được chấp thuận, checks bắt buộc pass, không conflict và PR đã merge vào `main`; lưu PR/merge commit trong lần cập nhật tiếp theo. Mở PR không đồng nghĩa được phê duyệt hoặc tự động merge.
 
-Đầu/cuối mỗi tuần rà soát todo với B, chia đều phần việc chung và ghi blockers cụ thể. Không coi review do công cụ hỗ trợ là phê duyệt của thành viên B.
+Đầu/cuối tuần cập nhật tiến độ và ghi blockers cụ thể. Riêng tuần 5 A tự chịu trách nhiệm, tuần 6 B tự chịu trách nhiệm; không giao review, kiểm thử hay phê duyệt chéo. Quy trình PR/checks và bảo vệ nhánh nếu có vẫn áp dụng, không mặc định chỉ định người còn lại. Các tuần có phần việc chung tiếp tục phối hợp theo kế hoạch.
 
 ## Mốc kiểm tra và thứ tự ưu tiên
 
 | Mốc | Điều kiện đối với A |
 |---|---|
 | Cuối tuần 4 | A01–A05: dữ liệu, baseline, framework và convention đã bàn giao |
-| Cuối tuần 8 | A06–A14: layer qua acceptance, review/merge code, NC final đúng protocol |
+| Cuối tuần 8 | A06/A07 và A10–A14: GCN qua acceptance và tích hợp, nhận GAT do B hoàn tất, NC final đúng protocol |
 | Cuối tuần 10 | A15–A19: hỗ trợ LP không leakage, 3–5 ablation chung và error analysis đủ bằng chứng |
 | Cuối tuần 12 | A20–A24: báo cáo, slide, demo, reproducibility và DoD toàn dự án được đối chiếu |
 
-Ưu tiên kế tiếp: review/merge GCN tuần 5 → test/review GAT tuần 6 → hai mạng NC → tuning/final → hỗ trợ LP/ablation → báo cáo và bàn giao. Khi B chưa bàn giao GAT, A có thể chuẩn bị mạng GCN, cấu hình và validation runner; phần GAT giữ blocker rõ ràng. Khi thiếu thời gian, bỏ mở rộng Citeseer/Pubmed trước, giữ deliverable bắt buộc Cora và 3–5 ablation đã chốt.
+Ưu tiên kế tiếp của A: hoàn tất tích hợp GCN tuần 5 → hai mạng NC tuần 7 → tuning/final → hỗ trợ LP/ablation → báo cáo và bàn giao. GAT tuần 6 do B tự hoàn tất; việc nhận layer GAT là đầu vào tuần 7, không phải task tuần 6 của A. Khi chưa có GAT, A có thể chuẩn bị mạng GCN, cấu hình và validation runner. Khi thiếu thời gian, bỏ mở rộng Citeseer/Pubmed trước, giữ deliverable bắt buộc Cora và 3–5 ablation đã chốt.

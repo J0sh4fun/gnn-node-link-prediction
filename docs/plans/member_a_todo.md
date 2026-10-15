@@ -8,16 +8,16 @@ PR kế hoạch và tracker: [#3 — Member A plan and progress checklist](https
 
 - **To do**: chưa bắt đầu; ghi rõ blocker nếu thiếu đầu vào. **Doing**: đang làm. **Review**: đã có đầu ra và kiểm tra, còn chờ review/merge. **Done**: đã nghiệm thu và tích hợp `main`.
 - Checkbox `[x]` chỉ dành cho Done. Task Review vẫn để `[ ]` dù code đã viết xong. Cập nhật cuối mỗi task và cuối tuần; thêm PR/commit và bằng chứng vào bảng nhật ký bên dưới.
-- Tuần là tuần tương đối theo kế hoạch gốc. Các mục A01–A05 được ghi nhận từ artifact đã có trên `main`, không phải xác minh runtime mới. Phần tuần 5 trên nhánh khác được ghi Review; chưa có bằng chứng hoàn tất tuần 6–12.
+- Tuần là tuần tương đối theo kế hoạch gốc. Các mục A01–A05 được ghi nhận từ artifact đã có trên `main`. Tuần 5 đã chạy lại kiểm thử ngày 2026-10-15: kỹ thuật hoàn tất, tracker giữ Review để theo dõi phần chưa merge. Không có task tuần 6 của A; B tự thực hiện toàn bộ tuần đó.
 - Khi hoàn tất triển khai task: cập nhật Review → commit riêng → push → PR Ready for review vào `main`. Sau review/checks và merge mới chuyển Done. Chi tiết tại [quy trình](member_a_plan.md#quy-trình-hoàn-thành-từng-task).
 
 ## Tổng quan ban đầu
 
 | To do | Doing | Review | Done | Tổng |
 |---:|---:|---:|---:|---:|
-| 18 | 0 | 1 | 5 | 24 |
+| 15 | 0 | 2 | 5 | 22 |
 
-Tiến độ theo số task: **5/24 Done (~21%)**. Các task có kích thước khác nhau; đây không phải phần trăm khối lượng hoặc thời gian dự án. Cập nhật lại bảng này khi đổi trạng thái.
+Tiến độ tích hợp theo số task A: **5/22 Done (~23%)**. A08/A09 cũ đã chuyển sang B, không còn trong mẫu số. Riêng tuần 5 đạt **6/6 tiêu chí kỹ thuật**, đang chờ tích hợp PR, không chờ B. Các task có kích thước khác nhau; đây không phải phần trăm khối lượng hoặc thời gian dự án. Cập nhật lại bảng này khi đổi trạng thái.
 
 ## Checklist thực hiện
 
@@ -29,17 +29,26 @@ Tiến độ theo số task: **5/24 Done (~21%)**. Các task có kích thước 
 - [x] **A04 · Tuần 4 · Done** — Trainer NC, early stopping, best checkpoint, seed/logging và tracking schema. Bằng chứng: [trainer](../../train/trainer.py), [tests](../../tests/test_trainer.py), [kiến trúc](../architecture/week4_framework_vi.md), [tracking](../../results/experiment_index.csv). Hoàn tất khi train/validation tách biệt và restore checkpoint đúng.
 - [x] **A05 · Tuần 4 · Done** — Utility normalization sparse, phối hợp edge/self-loop convention và bàn giao check-in 1. Bằng chứng: [graph ops](../../utils/graph_ops.py), [tests](../../tests/test_graph_ops.py), [bàn giao](../phase1_cleanup.md). Thiết kế layer tuần 4 được thay thế bằng implementation MessagePassing tuần 5; phần xác nhận thiết kế ở A07.
 
-### Tuần 5–6 — Layer và review chéo
+### Tuần 5 — A tự hoàn tất GCNLayer
 
-- [ ] **A06 · Tuần 5 · Review** — GCNLayer bằng MessagePassing, tự viết forward/message, self-loop trước degree, sparse normalization; đủ sáu Acceptance Criteria. Bằng chứng: [commit triển khai ff878c8d](https://github.com/J0sh4fun/gnn-node-link-prediction/commit/ff878c8d1817e67faba5e8d6da64d43abd325ba9), [commit kiểm chứng 35a5d01a](https://github.com/J0sh4fun/gnn-node-link-prediction/commit/35a5d01a47f292c66ed96c96f175fdd05329515b). Blocker: B review trực tiếp và merge code; chưa tích hợp `main`.
-- [ ] **A07 · Tuần 5 · To do** — Bàn giao API GCN cho B, xác nhận thiết kế MessagePassing thay đề xuất tuần 4, xử lý góp ý và PR code vào `main`. Phụ thuộc A06. Hoàn tất khi B xác nhận review, checks pass và PR code đã merge; không suy ra phê duyệt từ báo cáo Codex.
-- [ ] **A08 · Tuần 6 · To do** — Review và kiểm thử GAT của B: forward/backward, finite values, shapes, PyG parity cùng trọng số, sanity overfit; attention softmax theo node nhận, concat hidden heads/average output heads và self-loop. Blocker: GATLayer của B. Hoàn tất khi đủ Mục 5 và có nhận xét review để B xử lý.
-- [ ] **A09 · Tuần 6 · To do** — Benchmark GAT tự cài so với GATConv: cùng graph/weight/config/device/dtype, warm-up, số lần lặp, đồng bộ nếu dùng GPU; lưu thời gian và môi trường. Phụ thuộc A08; chưa đặt ngưỡng tốc độ tùy ý làm pass/fail.
+- [ ] **A06 · Tuần 5 · Review** — A tự cài GCNLayer, viết/chạy unit test và đối chiếu đủ sáu Acceptance Criteria. Bằng chứng: [implementation và tests](https://github.com/J0sh4fun/gnn-node-link-prediction/tree/35a5d01a47f292c66ed96c96f175fdd05329515b), [báo cáo kiểm tra mới](../../report/week05/progress_review.md): **66 passed**, 6/6 tiêu chí đạt. Kỹ thuật đã hoàn tất; còn merge code vào `main`, không yêu cầu B kiểm thử/review/xác nhận.
+- [ ] **A07 · Tuần 5 · Review** — A tự nghiệm thu, ghi API/thiết kế MessagePassing, báo cáo và chuẩn bị PR GCN vào `main`. Phụ thuộc A06. Báo cáo đã cập nhật và [PR #4](https://github.com/J0sh4fun/gnn-node-link-prediction/pull/4) đã Ready for review. Chuyển Done khi PR tích hợp; không có phụ thuộc B.
+
+### Tuần 6 — Chuyển toàn bộ sang B
+
+Không có task tuần 6 của A. Giữ mã cũ trong bảng chuyển giao để bảo toàn lịch sử, không tái sử dụng mã cho việc khác:
+
+| Mã cũ | Mã hiện hành của B | Nội dung |
+|---|---|---|
+| A08 | B06-02 | B tự viết/chạy acceptance tests cho GATLayer và tự nghiệm thu |
+| A09 | B06-03 | B tự benchmark GATLayer với GATConv |
+
+Chi tiết: [todo tuần 6 của B](member_b_week06_todo.md). A nhận GATLayer làm đầu vào cho tuần 7 sau khi B hoàn tất.
 
 ### Tuần 7–8 — Node Classification
 
 - [ ] **A10 · Tuần 7 · To do** — Mạng GCN hai tầng riêng, logits `[N, C]`, ReLU/dropout giữa tầng, mỗi tầng nhận cạnh thô. Phụ thuộc A06/A07. Hoàn tất khi test forward/backward và tích hợp trainer pass; đường dẫn dự kiến `models/gcn.py`.
-- [ ] **A11 · Tuần 7 · To do** — Mạng GAT hai tầng riêng, không trộn GCN/GAT; shape lớp ẩn/output đúng convention head. Phụ thuộc GAT của B và A08. Hoàn tất khi test mạng và trainer pass; đường dẫn dự kiến `models/gat.py`.
+- [ ] **A11 · Tuần 7 · To do** — Mạng GAT hai tầng riêng, không trộn GCN/GAT; shape lớp ẩn/output đúng convention head. Phụ thuộc GATLayer do B tự hoàn tất theo B06-01–B06-04. Hoàn tất khi test mạng và trainer pass; đường dẫn dự kiến `models/gat.py`.
 - [ ] **A12 · Tuần 7 · To do** — Runner NC cho GCN/GAT dùng cùng split/preprocessing; lưu config, validation metrics, seed, best checkpoint; bảng so sánh sơ bộ với MLP cho RQ1/RQ2. Phụ thuộc A10/A11. Mặc định validation-only, chưa chấm test; đường dẫn runner dự kiến `scripts/node_classification.py`.
 - [ ] **A13 · Tuần 8 · To do** — Tuning GCN (lr, depth, hidden dim, dropout, weight decay); nhận GAT config từ B, ghi search budget/seed và metric chọn checkpoint. Phụ thuộc A12. Chốt trước 3–5 ablation tuần 10 và cách phân tích; tất cả tuning chỉ dùng validation.
 - [ ] **A14 · Tuần 8 · To do** — Chốt NC configs, restore best checkpoint, final test một lần cho từng GCN/GAT đã chốt; dùng lại MLP final lịch sử. Lưu predictions, bảng Accuracy/Macro-F1, config/versions/checkpoint, liên hệ RQ1/RQ2; check-in 2. Phụ thuộc A13 và cấu hình GAT của B; không chọn biến thể tiếp theo bằng điểm test.
@@ -67,6 +76,8 @@ Mỗi task đang Doing/Review thêm một dòng khi có thay đổi. Link PR là
 | Ngày | Task | Trạng thái | Commit / PR / bằng chứng | Kiểm tra và bước tiếp theo |
 |---|---|---|---|---|
 | 2026-10-15 | A01–A05 | Done | `main` tại `f4dea8db959c0ce6b61a0166a51359fd2b4a43bc`; các artifact link trong checklist | Đối chiếu tài liệu/code hiện có; chưa chạy lại runtime trong lần lập kế hoạch |
-| 2026-10-09 | A06 | Review | `feature/gcn`: `ff878c8d1817e67faba5e8d6da64d43abd325ba9`, `35a5d01a47f292c66ed96c96f175fdd05329515b` | Báo cáo lịch sử ghi 57 rồi 66 focused tests pass; chờ B tự review, PR và merge theo A07 |
+| 2026-10-09 | A06 | Review | `feature/gcn`: `ff878c8d1817e67faba5e8d6da64d43abd325ba9`, `35a5d01a47f292c66ed96c96f175fdd05329515b` | Bằng chứng kiểm thử lịch sử; phân công chờ B cũ đã được thay thế ngày 2026-10-15 |
+| 2026-10-15 | A06/A07 | Review | [Kiểm tra tiến độ tuần 5](../../report/week05/progress_review.md), [PR #4](https://github.com/J0sh4fun/gnn-node-link-prediction/pull/4); log và JUnit mới | 66 tests pass, đủ 6/6 tiêu chí; A chịu trách nhiệm toàn bộ, chỉ còn tích hợp PR |
+| 2026-10-15 | A08/A09 | Chuyển giao | [B06-02/B06-03](member_b_week06_todo.md) | B thực hiện toàn bộ kiểm thử và benchmark tuần 6; loại khỏi số task A |
 
 Khi cần, thêm dòng với: `ngày | task ID | trạng thái | commit/PR/run/report | lệnh và kết quả kiểm tra; blocker; bước tiếp theo`. Không ghi Done chỉ vì đã commit hoặc push.
