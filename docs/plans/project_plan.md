@@ -169,10 +169,17 @@ Vì đề bài yêu cầu **tự cài đặt** cả GCN lẫn GAT, cách chia c�
 |---|---|---|
 | Kiến trúc tự cài đặt | GCN Layer (self-loop + symmetric normalization) | GAT Layer (attention coefficients + multi-head) |
 | Bài toán chính | Node Classification | Link Prediction |
-| Vai trò phụ | Review code GAT của B, hỗ trợ tuning | Review code GCN của A, hỗ trợ tuning |
+| Vai trò phụ | Hỗ trợ tuning, review tích hợp từ tuần 7 khi cần | Hỗ trợ tuning, review tích hợp từ tuần 7 khi cần |
 | Phần báo cáo | Lý thuyết GCN, thực nghiệm node classification, error analysis | Lý thuyết GAT, thực nghiệm link prediction, attention visualization |
 
 Các phần dùng chung (data pipeline, evaluation framework, slide, viết báo cáo tổng hợp) được **chia đôi thời lượng ở mỗi tuần**, không dồn vào cuối.
+
+**Điều chỉnh phân công ngày 2026-10-15:** Tuần 5 do **A thực hiện toàn bộ**
+(GCNLayer, unit test, tự nghiệm thu, báo cáo và PR), không có task hoặc điều kiện
+chờ B. Tuần 6 do **B thực hiện toàn bộ** (GATLayer, unit test, benchmark,
+tự nghiệm thu, báo cáo và PR), không có task hoặc điều kiện chờ A. Hai tuần
+này không áp dụng yêu cầu review chéo giữa A/B; quy trình PR/checks và quy tắc
+bảo vệ nhánh nếu có vẫn áp dụng, không mặc định chỉ định thành viên còn lại.
 
 ---
 
@@ -211,14 +218,14 @@ Các phần dùng chung (data pipeline, evaluation framework, slide, viết báo
 ### 🟩 Giai đoạn 2 — Xây dựng mô hình (Tuần 5–8)
 
 **Tuần 5 — Tự cài đặt GCN Layer**
-- A (chính): Cài `GCNLayer` theo công thức Mục 2.2, không dùng `GCNConv`.
-- B: Viết unit test theo Acceptance Criteria (Mục 5).
-- **Deliverable:** `models/gcn_layer.py` + test pass + checklist Mục 5 đạt đủ.
+- **A thực hiện toàn bộ:** Cài `GCNLayer` theo công thức Mục 2.2, không dùng `GCNConv` trong implementation; tự viết/chạy unit test theo Mục 5, kiểm tra self-loop/normalization sparse, ghi log và báo cáo, commit/push và chuẩn bị PR vào `main`.
+- **Nghiệm thu:** A tự đối chiếu đủ 6 Acceptance Criteria; không yêu cầu B viết test, review hoặc phê duyệt để hoàn tất kỹ thuật tuần 5.
+- **Deliverable:** `models/gcn_layer.py` + test pass + checklist Mục 5 đạt đủ + báo cáo/bằng chứng thực thi + PR sẵn sàng tích hợp. Theo dõi trạng thái merge riêng với trạng thái hoàn tất kỹ thuật.
 
 **Tuần 6 — Tự cài đặt GAT Layer**
-- B (chính): Cài `GATLayer` theo công thức Mục 2.3, không dùng `GATConv`.
-- A: Unit test theo Acceptance Criteria, benchmark tốc độ so với `GATConv` gốc.
-- **Deliverable:** `models/gat_layer.py` + test pass + checklist Mục 5 đạt đủ.
+- **B thực hiện toàn bộ:** Cài `GATLayer` theo công thức Mục 2.3, không dùng `GATConv` trong implementation; tự viết/chạy unit test theo Mục 5 và benchmark tốc độ với `GATConv` gốc cùng điều kiện; ghi log/báo cáo, commit/push và chuẩn bị PR vào `main`.
+- **Nghiệm thu:** B tự đối chiếu đủ 6 Acceptance Criteria; không yêu cầu A viết test, benchmark, review hoặc phê duyệt để hoàn tất kỹ thuật tuần 6.
+- **Deliverable:** `models/gat_layer.py` + test pass + checklist Mục 5 đạt đủ + benchmark/báo cáo/bằng chứng thực thi + PR sẵn sàng tích hợp. Theo dõi trạng thái merge riêng với trạng thái hoàn tất kỹ thuật.
 
 **Tuần 7 — Huấn luyện mô hình node classification**
 - A (chính): Xây **riêng biệt** một mạng 2-tầng dùng `GCNLayer` và một mạng 2-tầng dùng `GATLayer` (không ghép hai loại layer vào cùng một mạng), huấn luyện cả hai trên Cora, log kết quả vào bảng Mục 4.
@@ -271,7 +278,7 @@ Các phần dùng chung (data pipeline, evaluation framework, slide, viết báo
 |---|---|---|
 | Cài đặt kiến trúc chính (GCN/GAT) | 100% GCN | 100% GAT |
 | Bài toán chính | 100% Node Classification | 100% Link Prediction |
-| Review code chéo | 1 lần/tuần | 1 lần/tuần |
+| Review code chéo | 1 lần/tuần khi có phần chung; miễn phân công chéo ở tuần 5–6 | 1 lần/tuần khi có phần chung; miễn phân công chéo ở tuần 5–6 |
 | Data pipeline & baseline | 50% | 50% |
 | Tuning siêu tham số | 50% (GCN) | 50% (GAT) |
 | Ablation study | 50% | 50% |
