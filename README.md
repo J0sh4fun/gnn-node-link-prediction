@@ -6,6 +6,9 @@ Member A owns node classification/GCN; Member B owns link prediction/GAT.
 Complete GCN/GAT models remain Phase 2 work.
 
 Requirements: [Plan_GNN.md](Plan_GNN.md) links to the unchanged integrated plan.
+Member A: [implementation plan](docs/plans/member_a_plan.md) and
+[progress checklist](docs/plans/member_a_todo.md), including task-level commit,
+push and pull request workflow into `main`.
 See [cleanup and handoff](docs/phase1_cleanup.md) for semantic comparisons,
 compatibility decisions, unresolved issues and verification limits.
 
