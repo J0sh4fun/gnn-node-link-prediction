@@ -2,6 +2,8 @@
 
 Cập nhật: **2026-10-15**. [Kế hoạch A](member_a_plan.md) · [Kế hoạch dự án](project_plan.md).
 
+PR kế hoạch và tracker: [#3 — Member A plan and progress checklist](https://github.com/J0sh4fun/gnn-node-link-prediction/pull/3), nhánh `docs/member-a-plan` → `main`, Ready for review. Đây là PR tài liệu; PR triển khai từng task được ghi riêng khi có.
+
 ## Cách theo dõi
 
 - **To do**: chưa bắt đầu; ghi rõ blocker nếu thiếu đầu vào. **Doing**: đang làm. **Review**: đã có đầu ra và kiểm tra, còn chờ review/merge. **Done**: đã nghiệm thu và tích hợp `main`.
