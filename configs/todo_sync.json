@@ -9,7 +9,9 @@
     "A06": {"pr": 4, "evidence": "gcn"},
     "A07": {"pr": 4, "evidence": "gcn"},
     "B06-01": {"pr": 6, "evidence": "gat"},
-    "B06-02": {"pr": 6, "evidence": "gat"}
+    "B06-02": {"pr": 6, "evidence": "gat"},
+    "B06-03": {"pr": 8, "evidence": "gat_week06_complete"},
+    "B06-04": {"pr": 8, "evidence": "gat_week06_complete"}
   },
   "evidence": {
     "gcn": {
@@ -26,6 +28,13 @@
       "expected_tests": 77,
       "report": "report/week06/progress_review.md",
       "sanity": "results/week06/gat_sanity_observation.json"
+    },
+    "gat_week06_complete": {
+      "revision": "f8fa506ca763d6b5ffbdf253c043564abe316390",
+      "sources": ["models/gat_layer.py", "tests/test_gat_layer.py", "scripts/benchmark_gat.py", "tests/test_benchmark_gat.py", "configs/gat_benchmark.json", "requirements.txt", "results/week06/gat_benchmark.json", "results/week06/completion_junit.xml", "results/week06/completion_pytest.txt", "report/week06/member_b.md"],
+      "junit": "results/week06/completion_junit.xml",
+      "expected_tests": 101,
+      "report": "report/week06/member_b.md"
     }
   }
 }

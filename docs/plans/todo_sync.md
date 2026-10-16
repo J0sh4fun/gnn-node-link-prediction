@@ -42,7 +42,8 @@ này không sửa các cài đặt quyền repo đã được người dùng ph�
 ## Điều kiện cập nhật
 
 Quy tắc trong [todo_sync.json](../../configs/todo_sync.json) hiện theo dõi tự
-động **A06/A07** qua PR #4, **B06-01/B06-02** qua PR #6. Với mỗi task:
+động **A06/A07** qua PR #4, **B06-01/B06-02** qua PR #6 và
+**B06-03/B06-04** qua PR #8. Với mỗi task:
 
 1. Đọc PR và đúng base repo/nhánh `main`; phân biệt merged, open, draft và đóng không merge.
 2. Kiểm tra JUnit đúng số testcase, không failure/error/skip; có báo cáo nghiệm thu. GAT còn kiểm tra sanity trace đúng commit và finite outputs/gradients.
@@ -59,10 +60,13 @@ bộ cuối job hoặc lần làm việc kế tiếp; không mở PR todo nền 
 ## Phần cần xác minh thủ công
 
 Task chưa được khai báo trong `verified_tasks` giữ trạng thái thủ công, nhưng
-vẫn được đếm và đồng bộ checkbox theo trạng thái. Đặc biệt **B06-03 benchmark**
-và **B06-04 bàn giao** không tự Done chỉ vì merge PR #6 hoặc xuất hiện file
-tên benchmark. B cần thực hiện/kiểm chứng rồi cập nhật tracker. Phân công tuần
-5 hoàn toàn A và tuần 6 hoàn toàn B vẫn giữ nguyên.
+vẫn được đếm và đồng bộ checkbox theo trạng thái. **B06-03 benchmark** và
+**B06-04 bàn giao** nay đã có benchmark thực tế, 101 test pass và báo cáo đầy
+đủ, được đăng ký ở commit `f8fa506ca763d6b5ffbdf253c043564abe316390`. Các file
+code/test/config, raw results, JUnit và báo cáo được ghim trong `sources` để
+phát hiện bằng chứng thay đổi. Hai task chỉ Done sau khi PR #8 tích hợp và
+bằng chứng vẫn khớp; không suy ra từ tên file hoặc merge PR #6. Phân công
+tuần 5 hoàn toàn A và tuần 6 hoàn toàn B vẫn giữ nguyên.
 
 Để thêm task vào đồng bộ: lưu test/báo cáo thực tế, commit đã kiểm chứng, PR,
 danh sách đầy đủ source/test/dependency và số test vào config; review bản khai
