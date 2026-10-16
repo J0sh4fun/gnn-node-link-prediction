@@ -1,0 +1,13 @@
+{
+  "seed": 42,
+  "device": "cpu",
+  "dtype": "float32",
+  "threads": 1,
+  "warmup": 10,
+  "repeats": 50,
+  "cases": [
+    {"name": "toy_concat", "num_nodes": 64, "undirected_pairs": 128, "in_channels": 16, "out_channels": 8, "heads": 2, "concat": true},
+    {"name": "cora_size_hidden", "num_nodes": 2708, "undirected_pairs": 5278, "in_channels": 1433, "out_channels": 8, "heads": 8, "concat": true},
+    {"name": "cora_size_output", "num_nodes": 2708, "undirected_pairs": 5278, "in_channels": 64, "out_channels": 7, "heads": 8, "concat": false}
+  ]
+}

@@ -17,20 +17,20 @@ nhánh `feature/gat-layer`; [PR #6](https://github.com/J0sh4fun/gnn-node-link-pr
 benchmark/báo cáo nghiệm thu tuần 6 trong commit đó. Chi tiết và bằng chứng mới
 tại [báo cáo tiến độ](../../report/week06/progress_review.md).
 
-- [ ] **B06-01 · Review** — Đã có `models/gat_layer.py` kế thừa MessagePassing; tự viết forward/message, attention score và softmax theo node nhận; self-loop; concat/average heads; không dùng GATConv trong implementation. Trạng thái theo PR #6 và bằng chứng code/test tại commit nêu trên.
-- [ ] **B06-02 · Review** — 11 test GAT pass, kiểm tra forward/backward, finite values, shapes, GATConv parity cùng weight/config, attention sum, graph mẫu tính tay và sanity overfit. Tổng 77 test gồm hồi quy GCN/utility/trainer pass; đủ 6/6 tiêu chí layer trong phạm vi CPU đã thử. Sanity 60 epoch: loss 1.169088 → 0.346603, finite outputs/gradients, giảm tại các mốc 10 epoch. Trạng thái tích hợp theo PR #6. Đây là phần chuyển từ A08 cũ.
-- [ ] **B06-03 · To do** — Tự benchmark với GATConv: cùng graph, kích thước, weight/config/device/dtype; ghi warm-up, số lần lặp, cách đo, đồng bộ GPU nếu dùng, môi trường và kết quả. Không coi một ngưỡng tốc độ chưa thống nhất là pass/fail. Đây là phần chuyển từ A09 cũ.
+- [x] **B06-01 · Done** — Đã có `models/gat_layer.py` kế thừa MessagePassing; tự viết forward/message, attention score và softmax theo node nhận; self-loop; concat/average heads; không dùng GATConv trong implementation. Trạng thái theo PR #6 và bằng chứng code/test tại commit nêu trên.
+- [x] **B06-02 · Done** — 11 test GAT pass, kiểm tra forward/backward, finite values, shapes, GATConv parity cùng weight/config, attention sum, graph mẫu tính tay và sanity overfit. Tổng 77 test gồm hồi quy GCN/utility/trainer pass; đủ 6/6 tiêu chí layer trong phạm vi CPU đã thử. Sanity 60 epoch: loss 1.169088 → 0.346603, finite outputs/gradients, giảm tại các mốc 10 epoch. Trạng thái tích hợp theo PR #6. Đây là phần chuyển từ A08 cũ.
+- [ ] **B06-03 · Doing** — Đã bổ sung runner/config benchmark tái lập cùng graph, weight/config/device/dtype, kiểm tra parity output/gradient, đo inference và forward/backward. Tests runner đã pass; đang chạy phép đo và hoàn thiện báo cáo. Không đặt ngưỡng tốc độ làm pass/fail. Đây là phần chuyển từ A09 cũ.
 - [ ] **B06-04 · Doing** — Đã có commit/push và PR #6 Ready for review; lần kiểm tra này lưu log/JUnit, sanity trace và báo cáo đạt 6/6 tiêu chí layer. Chưa đủ gói nghiệm thu cuối: còn benchmark B06-03, báo cáo bàn giao/API cuối của B và tích hợp PR. Trạng thái phản ánh deliverable có một phần, không xác nhận B đã trực tiếp chạy hoặc phê duyệt. Không mặc định giao A làm reviewer.
 
 <!-- todo-sync:summary:start -->
 | To do | Doing | Review | Done | Tổng |
 |---:|---:|---:|---:|---:|
-| 1 | 1 | 2 | 0 | 4 |
+| 0 | 2 | 0 | 2 | 4 |
 
-**0/4 task đã nghiệm thu và tích hợp main.** Số task không biểu thị phần trăm khối lượng.
+**2/4 task đã nghiệm thu và tích hợp main.** Số task không biểu thị phần trăm khối lượng.
 
-- **B06-01 · Review** — [PR #6](https://github.com/J0sh4fun/gnn-node-link-prediction/pull/6). Đã nghiệm thu; PR đang mở, chưa merge.
-- **B06-02 · Review** — [PR #6](https://github.com/J0sh4fun/gnn-node-link-prediction/pull/6). Đã nghiệm thu; PR đang mở, chưa merge.
+- **B06-01 · Done** — [PR #6](https://github.com/J0sh4fun/gnn-node-link-prediction/pull/6). Đã merge vào main; code/test khớp phiên bản đã nghiệm thu.
+- **B06-02 · Done** — [PR #6](https://github.com/J0sh4fun/gnn-node-link-prediction/pull/6). Đã merge vào main; code/test khớp phiên bản đã nghiệm thu.
 
 Task chưa có quy tắc bằng chứng giữ trạng thái thủ công; không suy diễn từ tên file/PR.
 <!-- todo-sync:summary:end -->
