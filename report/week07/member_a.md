@@ -3,6 +3,8 @@
 Ngày kiểm chứng: **2026-10-16**. Phạm vi: **A10–A12** theo
 [kế hoạch A](../../docs/plans/member_a_plan.md). Hoàn tất kỹ thuật, **Review**,
 chờ nghiệm thu/tích hợp PR vào `main`; không ghi nhận phê duyệt cá nhân thay A.
+[PR #9](https://github.com/J0sh4fun/gnn-node-link-prediction/pull/9) ở trạng thái
+Ready for review, gồm các commit riêng cho A10, A11 và A12.
 
 ## Kiểm tra tiến độ và đầu vào
 

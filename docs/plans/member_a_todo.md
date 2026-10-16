@@ -30,6 +30,11 @@ Task chưa có quy tắc bằng chứng giữ trạng thái thủ công; không 
 
 A08/A09 cũ đã chuyển sang B, không còn trong mẫu số. Phân công tuần 5/6 độc lập giữa hai thành viên.
 
+Tuần 7 A10–A12 đã đủ đầu ra kỹ thuật, đang **Review** tại
+[PR #9](https://github.com/J0sh4fun/gnn-node-link-prediction/pull/9),
+nhánh `feature/a-week07-node-classification` → `main`.
+[Báo cáo và lệnh tái lập](../../report/week07/member_a.md); chưa chấm test set.
+
 ## Checklist thực hiện
 
 ### Tuần 1–4 — Nền tảng
