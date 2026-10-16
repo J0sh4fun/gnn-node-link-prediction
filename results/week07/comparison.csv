@@ -1,0 +1,4 @@
+model,val_accuracy,val_macro_f1,source
+MLP (historical),0.588,0.5681975052916394,results/baseline_mlp_log.json
+GCN,0.776,0.7620567548967764,results/week07/gcn/summary.json
+GAT,0.8,0.790818188369491,results/week07/gat/summary.json
