@@ -15,8 +15,9 @@ tasks in those weeks. See the [Week 5 progress review](report/week05/progress_re
 and [B's Week 6 checklist](docs/plans/member_b_week06_todo.md).
 The [Week 6 progress review](report/week06/progress_review.md) records the GAT
 acceptance results and the remaining benchmark and handoff work.
-The [todo synchronization guide](docs/plans/todo_sync.md) explains the automatic
-PR/acceptance-based updates and daily GitHub Actions schedule.
+The [todo synchronization guide](docs/plans/todo_sync.md) and
+[job completion rules](AGENTS.md) require updating todos at the end of each job,
+with the job's changes in the same branch/PR.
 See [cleanup and handoff](docs/phase1_cleanup.md) for semantic comparisons,
 compatibility decisions, unresolved issues and verification limits.
 

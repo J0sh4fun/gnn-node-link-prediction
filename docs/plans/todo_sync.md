@@ -1,10 +1,24 @@
-# Đồng bộ todo theo tiến độ project
+# Đồng bộ todo khi hoàn thành mỗi job
 
 Cơ chế đọc trạng thái PR trên GitHub và bằng chứng nghiệm thu đã lưu để cập
 nhật checkbox, trạng thái, ngày thay đổi và tổng số task trong hai tracker A/B.
 Không chạy thí nghiệm Cora, không đánh giá lại test set và không tự tạo số liệu.
 
-## Cách chạy và lịch tự động
+## Rule hiện hành — 2026-10-16
+
+Sau mỗi job code, tài liệu hoặc kiểm tra tiến độ, cập nhật todo ngay và đưa
+thay đổi vào cùng commit/nhánh của job. Nếu job có PR, dùng cùng PR đó.
+**Không chạy theo lịch hằng ngày và không tạo PR riêng để cập nhật todo.**
+
+Rule được lưu trong [AGENTS.md](../../AGENTS.md) để áp dụng cho các lần làm
+việc tiếp theo. Khi hoàn tất một job:
+
+1. Chạy kiểm tra phù hợp và lưu bằng chứng; cập nhật nội dung/task thủ công nếu chưa có quy tắc tự kiểm chứng.
+2. Chạy script bên dưới với dữ liệu GitHub mới để đồng bộ các task đã khai báo, checkbox và tổng số task.
+3. Commit todo cùng phần việc của job, push và cập nhật PR của chính job nếu có. Nếu không có thay đổi tiến độ thì không tạo commit todo thừa.
+4. Chỉ ghi Done khi đủ bằng chứng và đã tích hợp main; xong kỹ thuật nhưng chưa merge vẫn là Review.
+
+## Lệnh cuối job
 
 ```powershell
 $env:GITHUB_TOKEN = '<token đọc repo, không ghi vào file>'
@@ -16,18 +30,14 @@ Không in token vào output hoặc đưa token vào commit. Có thể dùng
 `--save-snapshot runs/todo-sync/snapshot.json` để lưu dữ liệu API không chứa
 token, rồi chạy lại offline bằng `--snapshot runs/todo-sync/snapshot.json`.
 
-Workflow [sync-todos.yml](../../.github/workflows/sync-todos.yml) chạy khi có
-push vào `main`, mỗi ngày **09:15 Asia/Bangkok (02:15 UTC)**, hoặc chạy thủ công.
-Lịch GitHub có thể bị trễ. Workflow bắt đầu hoạt động khi được merge vào `main`.
-Nó chạy tests đồng bộ, commit/push lên nhánh riêng `automation/todo-sync` và
-tạo/cập nhật một PR vào `main`; không tự approve/merge. Nhánh này dành riêng
-cho bot, không chỉnh tay vì mỗi lần đồng bộ sẽ thay bằng bản mới dựa trên
-`main` với force-with-lease.
+Script chỉ ghi các tracker trong working tree; không commit, push, tạo PR,
+approve hoặc merge. Agent thực hiện lệnh này theo rule cuối job trong
+AGENTS.md, không có tiến trình nền hoặc GitHub workflow chạy theo lịch.
+Workflow đồng bộ/lịch 09:15 và bước tạo PR bot trước đây đã được gỡ.
 
-Repo cần bật **Allow GitHub Actions to create and approve pull requests** để
-token của workflow tạo PR. Cơ chế chỉ tạo/cập nhật PR, không gọi API approve.
-Quyền job: `contents: write`, `pull-requests: write`; không đổi quyền mặc định
-của workflow khác. Xem [GitHub Docs về quyền Actions](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository).
+Quyền đọc repo đủ cho script. Tùy chọn Actions tạo/phê duyệt PR đã được bật
+trong lần thiết lập trước không còn là điều kiện của rule này; thay đổi lần
+này không sửa các cài đặt quyền repo đã được người dùng phê duyệt.
 
 ## Điều kiện cập nhật
 
@@ -41,7 +51,10 @@ Quy tắc trong [todo_sync.json](../../configs/todo_sync.json) hiện theo dõi 
 
 Thiếu bằng chứng không được coi là hoàn tất. Lỗi API hoặc tracker sai cấu trúc
 dừng đồng bộ trước khi ghi file. Không có thay đổi thực chất thì không đổi
-ngày/commit, tránh PR lặp mỗi ngày.
+ngày/commit, tránh tạo thay đổi thừa khi kết thúc job nhiều lần.
+
+Nếu merge diễn ra sau commit cuối, trạng thái Done được ghi lại ở lần đồng
+bộ cuối job hoặc lần làm việc kế tiếp; không mở PR todo nền để theo dõi riêng.
 
 ## Phần cần xác minh thủ công
 
@@ -65,10 +78,7 @@ thái hiện tại nằm trong checklist và block `todo-sync:summary`.
 - 16 unit tests pass: merge/draft/đóng không merge, code đổi/revert, bằng chứng lỗi, giữ task thủ công, idempotence và không ghi một phần khi tracker lỗi.
 - Đồng bộ với API GitHub thật: A06/A07 Done sau PR #4; B06-01/B06-02 Review theo PR #6; A có 7/22 Done, B tuần 6 có 0/4 Done.
 - Chạy lại cùng snapshot offline: không có thay đổi, exit 0.
-- Workflow pass actionlint 1.7.12 (tải bản chính thức, kiểm tra SHA256); không chạy workflow GitHub trước khi merge vào main.
+- Script được chạy lại khi hoàn tất job; snapshot offline dùng cho kiểm thử, không thay dữ liệu GitHub mới khi cập nhật tiến độ thực tế.
 
-Trạng thái kích hoạt: người dùng đã cho phép rõ ràng bật tùy chọn gộp
-Actions tạo/phê duyệt PR ngày 2026-10-16. Đã bật và đọc lại xác nhận
-`can_approve_pull_request_reviews=true`; quyền mặc định vẫn là `read`.
-Workflow không gọi API approve/merge. PR #7 còn đang mở; lịch tự động bắt đầu
-sau khi workflow được merge vào main.
+PR #7 được cập nhật theo rule cuối job, bỏ workflow theo lịch và tạo PR bot.
+Không cần chờ lịch hoặc bật thêm quyền Actions để chạy lệnh đồng bộ.

@@ -156,7 +156,7 @@ def render(root: Path, config: dict, data: dict, relative: str, date: str) -> st
     summary += "\n".join(notes)
     summary += "\n\nTask chưa có quy tắc bằng chứng giữ trạng thái thủ công; không suy diễn từ tên file/PR."
     updated = block(updated, "summary", summary)
-    # Refresh the date only for substantive changes; daily runs remain idempotent.
+    # Refresh the date only for substantive changes; repeated job completion is idempotent.
     if updated != original:
         updated = re.sub(r"(?m)^Đồng bộ todo: \*\*\d{4}-\d{2}-\d{2}\*\*\.",
                          f"Đồng bộ todo: **{date}**.", updated)
