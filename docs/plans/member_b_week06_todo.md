@@ -21,12 +21,12 @@ Xem [báo cáo nghiệm thu/bàn giao](../../report/week06/member_b.md) và
 - [x] **B06-01 · Done** — Đã có `models/gat_layer.py` kế thừa MessagePassing; tự viết forward/message, attention score và softmax theo node nhận; self-loop; concat/average heads; không dùng GATConv trong implementation. Trạng thái theo PR #6 và bằng chứng code/test tại commit nêu trên.
 - [x] **B06-02 · Done** — 11 test GAT pass, kiểm tra forward/backward, finite values, shapes, GATConv parity cùng weight/config, attention sum, graph mẫu tính tay và sanity overfit. Tổng 77 test gồm hồi quy GCN/utility/trainer pass; đủ 6/6 tiêu chí layer trong phạm vi CPU đã thử. Sanity 60 epoch: loss 1.169088 → 0.346603, finite outputs/gradients, giảm tại các mốc 10 epoch. Trạng thái tích hợp theo PR #6. Đây là phần chuyển từ A08 cũ.
 - [ ] **B06-03 · Review** — Đã chạy [benchmark](../../results/week06/gat_benchmark.json) trên 3 graph tổng hợp/cấu hình, 2 mode, warm-up 10 và 50 sample/lớp/mode. Cùng graph/weight/config/device/dtype; output/gradient parity pass. Ratio median custom/PyG 0.985–1.019 trên CPU đã đo. Runner/config/raw samples và provenance đầy đủ; còn tích hợp nhánh hoàn tất. Không đặt ngưỡng tốc độ làm pass/fail. Đây là phần chuyển từ A09 cũ.
-- [ ] **B06-04 · Doing** — Đã có commit/push và PR #6 Ready for review; lần kiểm tra này lưu log/JUnit, sanity trace và báo cáo đạt 6/6 tiêu chí layer. Chưa đủ gói nghiệm thu cuối: còn benchmark B06-03, báo cáo bàn giao/API cuối của B và tích hợp PR. Trạng thái phản ánh deliverable có một phần, không xác nhận B đã trực tiếp chạy hoặc phê duyệt. Không mặc định giao A làm reviewer.
+- [ ] **B06-04 · Review** — Đã đủ [báo cáo/API bàn giao](../../report/week06/member_b.md), 6/6 Acceptance Criteria, log/JUnit mới 101 test pass và benchmark thực tế. Code layer đã merge qua PR #6; benchmark/bàn giao đã commit/push trên nhánh `feature/week06-completion`, sẵn sàng PR của chính job. Còn tích hợp phần bổ sung vào main; không có phụ thuộc A và không ghi nhận phê duyệt cá nhân chưa xảy ra.
 
 <!-- todo-sync:summary:start -->
 | To do | Doing | Review | Done | Tổng |
 |---:|---:|---:|---:|---:|
-| 0 | 1 | 1 | 2 | 4 |
+| 0 | 0 | 2 | 2 | 4 |
 
 **2/4 task đã nghiệm thu và tích hợp main.** Số task không biểu thị phần trăm khối lượng.
 
