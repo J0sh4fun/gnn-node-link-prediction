@@ -67,7 +67,8 @@ thái hiện tại nằm trong checklist và block `todo-sync:summary`.
 - Chạy lại cùng snapshot offline: không có thay đổi, exit 0.
 - Workflow pass actionlint 1.7.12 (tải bản chính thức, kiểm tra SHA256); không chạy workflow GitHub trước khi merge vào main.
 
-Trạng thái kích hoạt khi kiểm tra: PR #7 đang mở, không conflict; workflow
-chưa nằm trên main. Quyền Actions tạo PR hiện tắt. Automatic approval review
-đã từ chối bật tùy chọn gộp tạo/phê duyệt PR vì đây là thay đổi quyền toàn repo;
-đang chờ người dùng cho phép rõ ràng. Không có cài đặt quyền nào bị thay đổi.
+Trạng thái kích hoạt: người dùng đã cho phép rõ ràng bật tùy chọn gộp
+Actions tạo/phê duyệt PR ngày 2026-10-16. Đã bật và đọc lại xác nhận
+`can_approve_pull_request_reviews=true`; quyền mặc định vẫn là `read`.
+Workflow không gọi API approve/merge. PR #7 còn đang mở; lịch tự động bắt đầu
+sau khi workflow được merge vào main.
