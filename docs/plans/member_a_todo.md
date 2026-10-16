@@ -18,7 +18,7 @@ PR kế hoạch và tracker: [#3 — Member A plan and progress checklist](https
 <!-- todo-sync:summary:start -->
 | To do | Doing | Review | Done | Tổng |
 |---:|---:|---:|---:|---:|
-| 15 | 0 | 0 | 7 | 22 |
+| 12 | 2 | 1 | 7 | 22 |
 
 **7/22 task đã nghiệm thu và tích hợp main.** Số task không biểu thị phần trăm khối lượng.
 
@@ -58,9 +58,9 @@ Chi tiết: [todo tuần 6 của B](member_b_week06_todo.md). A nhận GATLayer 
 
 ### Tuần 7–8 — Node Classification
 
-- [ ] **A10 · Tuần 7 · To do** — Mạng GCN hai tầng riêng, logits `[N, C]`, ReLU/dropout giữa tầng, mỗi tầng nhận cạnh thô. Phụ thuộc A06/A07. Hoàn tất khi test forward/backward và tích hợp trainer pass; đường dẫn dự kiến `models/gcn.py`.
-- [ ] **A11 · Tuần 7 · To do** — Mạng GAT hai tầng riêng, không trộn GCN/GAT; shape lớp ẩn/output đúng convention head. Phụ thuộc GATLayer do B tự hoàn tất theo B06-01–B06-04. Hoàn tất khi test mạng và trainer pass; đường dẫn dự kiến `models/gat.py`.
-- [ ] **A12 · Tuần 7 · To do** — Runner NC cho GCN/GAT dùng cùng split/preprocessing; lưu config, validation metrics, seed, best checkpoint; bảng so sánh sơ bộ với MLP cho RQ1/RQ2. Phụ thuộc A10/A11. Mặc định validation-only, chưa chấm test; đường dẫn runner dự kiến `scripts/node_classification.py`.
+- [ ] **A10 · Tuần 7 · Review** — Mạng GCN hai tầng riêng, logits `[N, C]`, ReLU/dropout giữa tầng, mỗi tầng nhận cạnh thô. Phụ thuộc A06/A07. Hoàn tất khi test forward/backward và tích hợp trainer pass; đường dẫn dự kiến `models/gcn.py`.
+- [ ] **A11 · Tuần 7 · Doing** — Mạng GAT hai tầng riêng, không trộn GCN/GAT; shape lớp ẩn/output đúng convention head. Phụ thuộc GATLayer do B tự hoàn tất theo B06-01–B06-04. Hoàn tất khi test mạng và trainer pass; đường dẫn dự kiến `models/gat.py`.
+- [ ] **A12 · Tuần 7 · Doing** — Runner NC cho GCN/GAT dùng cùng split/preprocessing; lưu config, validation metrics, seed, best checkpoint; bảng so sánh sơ bộ với MLP cho RQ1/RQ2. Phụ thuộc A10/A11. Mặc định validation-only, chưa chấm test; đường dẫn runner dự kiến `scripts/node_classification.py`.
 - [ ] **A13 · Tuần 8 · To do** — Tuning GCN (lr, depth, hidden dim, dropout, weight decay); nhận GAT config từ B, ghi search budget/seed và metric chọn checkpoint. Phụ thuộc A12. Chốt trước 3–5 ablation tuần 10 và cách phân tích; tất cả tuning chỉ dùng validation.
 - [ ] **A14 · Tuần 8 · To do** — Chốt NC configs, restore best checkpoint, final test một lần cho từng GCN/GAT đã chốt; dùng lại MLP final lịch sử. Lưu predictions, bảng Accuracy/Macro-F1, config/versions/checkpoint, liên hệ RQ1/RQ2; check-in 2. Phụ thuộc A13 và cấu hình GAT của B; không chọn biến thể tiếp theo bằng điểm test.
 
@@ -92,3 +92,5 @@ Mỗi task đang Doing/Review thêm một dòng khi có thay đổi. Link PR là
 | 2026-10-15 | A08/A09 | Chuyển giao | [B06-02/B06-03](member_b_week06_todo.md) | B thực hiện toàn bộ kiểm thử và benchmark tuần 6; loại khỏi số task A |
 
 Khi cần, thêm dòng với: `ngày | task ID | trạng thái | commit/PR/run/report | lệnh và kết quả kiểm tra; blocker; bước tiếp theo`. Không ghi Done chỉ vì đã commit hoặc push.
+
+| 2026-10-16 | A10 | Review | models/gcn.py; 	ests/test_nc_networks.py | Forward/backward, raw-edge wiring and trainer isolation pass (29 tests including trainer); pending PR integration. |
