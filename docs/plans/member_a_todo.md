@@ -1,6 +1,6 @@
 # Todo thành viên A
 
-Cập nhật: **2026-10-15**. [Kế hoạch A](member_a_plan.md) · [Kế hoạch dự án](project_plan.md).
+Cập nhật: **2026-10-16**. [Kế hoạch A](member_a_plan.md) · [Kế hoạch dự án](project_plan.md).
 
 Đồng bộ todo: **2026-10-16**. [Cơ chế tự động](todo_sync.md).
 
@@ -18,7 +18,7 @@ PR kế hoạch và tracker: [#3 — Member A plan and progress checklist](https
 <!-- todo-sync:summary:start -->
 | To do | Doing | Review | Done | Tổng |
 |---:|---:|---:|---:|---:|
-| 15 | 0 | 0 | 7 | 22 |
+| 12 | 0 | 3 | 7 | 22 |
 
 **7/22 task đã nghiệm thu và tích hợp main.** Số task không biểu thị phần trăm khối lượng.
 
@@ -29,6 +29,11 @@ Task chưa có quy tắc bằng chứng giữ trạng thái thủ công; không 
 <!-- todo-sync:summary:end -->
 
 A08/A09 cũ đã chuyển sang B, không còn trong mẫu số. Phân công tuần 5/6 độc lập giữa hai thành viên.
+
+Tuần 7 A10–A12 đã đủ đầu ra kỹ thuật, đang **Review** tại
+[PR #9](https://github.com/J0sh4fun/gnn-node-link-prediction/pull/9),
+nhánh `feature/a-week07-node-classification` → `main`.
+[Báo cáo và lệnh tái lập](../../report/week07/member_a.md); chưa chấm test set.
 
 ## Checklist thực hiện
 
@@ -58,9 +63,9 @@ Chi tiết: [todo tuần 6 của B](member_b_week06_todo.md). A nhận GATLayer 
 
 ### Tuần 7–8 — Node Classification
 
-- [ ] **A10 · Tuần 7 · To do** — Mạng GCN hai tầng riêng, logits `[N, C]`, ReLU/dropout giữa tầng, mỗi tầng nhận cạnh thô. Phụ thuộc A06/A07. Hoàn tất khi test forward/backward và tích hợp trainer pass; đường dẫn dự kiến `models/gcn.py`.
-- [ ] **A11 · Tuần 7 · To do** — Mạng GAT hai tầng riêng, không trộn GCN/GAT; shape lớp ẩn/output đúng convention head. Phụ thuộc GATLayer do B tự hoàn tất theo B06-01–B06-04. Hoàn tất khi test mạng và trainer pass; đường dẫn dự kiến `models/gat.py`.
-- [ ] **A12 · Tuần 7 · To do** — Runner NC cho GCN/GAT dùng cùng split/preprocessing; lưu config, validation metrics, seed, best checkpoint; bảng so sánh sơ bộ với MLP cho RQ1/RQ2. Phụ thuộc A10/A11. Mặc định validation-only, chưa chấm test; đường dẫn runner dự kiến `scripts/node_classification.py`.
+- [ ] **A10 · Tuần 7 · Review** — Đã có [GCN hai tầng](../../models/gcn.py), logits `[N, C]`, ReLU/dropout giữa tầng, mỗi tầng nhận cạnh thô. Forward/backward và trainer pass; xem [nghiệm thu tuần 7](../../report/week07/member_a.md). Chờ nghiệm thu/tích hợp PR.
+- [ ] **A11 · Tuần 7 · Review** — Đã có [GAT hai tầng độc lập](../../models/gat.py), hidden heads concat/output heads average, ELU và feature/attention dropout. Tests mạng và trainer pass; đầu vào B06-01–B06-04 đã tích hợp main. Xem [báo cáo](../../report/week07/member_a.md); chờ nghiệm thu/tích hợp PR.
+- [ ] **A12 · Tuần 7 · Review** — Đã chạy [runner NC](../../scripts/node_classification.py) trên Cora cùng split/preprocessing, seed 42; lưu config/environment/history/checkpoint/hash. Validation Accuracy GCN/GAT 0,776/0,800; [bảng MLP/GCN/GAT](../../results/week07/comparison.csv), [báo cáo RQ1/RQ2](../../report/week07/member_a.md). 131 passed, 1 skipped (CUDA); chưa chấm test. Weights ở `runs/week07-a/` (local, ignored), có lệnh tái tạo. Chờ nghiệm thu/tích hợp PR.
 - [ ] **A13 · Tuần 8 · To do** — Tuning GCN (lr, depth, hidden dim, dropout, weight decay); nhận GAT config từ B, ghi search budget/seed và metric chọn checkpoint. Phụ thuộc A12. Chốt trước 3–5 ablation tuần 10 và cách phân tích; tất cả tuning chỉ dùng validation.
 - [ ] **A14 · Tuần 8 · To do** — Chốt NC configs, restore best checkpoint, final test một lần cho từng GCN/GAT đã chốt; dùng lại MLP final lịch sử. Lưu predictions, bảng Accuracy/Macro-F1, config/versions/checkpoint, liên hệ RQ1/RQ2; check-in 2. Phụ thuộc A13 và cấu hình GAT của B; không chọn biến thể tiếp theo bằng điểm test.
 
@@ -90,5 +95,8 @@ Mỗi task đang Doing/Review thêm một dòng khi có thay đổi. Link PR là
 | 2026-10-09 | A06 | Review | `feature/gcn`: `ff878c8d1817e67faba5e8d6da64d43abd325ba9`, `35a5d01a47f292c66ed96c96f175fdd05329515b` | Bằng chứng kiểm thử lịch sử; phân công chờ B cũ đã được thay thế ngày 2026-10-15 |
 | 2026-10-15 | A06/A07 | Review | [Kiểm tra tiến độ tuần 5](../../report/week05/progress_review.md), [PR #4](https://github.com/J0sh4fun/gnn-node-link-prediction/pull/4); log và JUnit mới | 66 tests pass, đủ 6/6 tiêu chí; A chịu trách nhiệm toàn bộ, chỉ còn tích hợp PR |
 | 2026-10-15 | A08/A09 | Chuyển giao | [B06-02/B06-03](member_b_week06_todo.md) | B thực hiện toàn bộ kiểm thử và benchmark tuần 6; loại khỏi số task A |
+| 2026-10-16 | A10 | Review | `ffe51f35`; [GCN](../../models/gcn.py), [tests](../../tests/test_nc_networks.py) | Forward/backward, raw-edge wiring và trainer pass; chờ tích hợp PR |
+| 2026-10-16 | A11 | Review | `9dae73c3`; [GAT](../../models/gat.py), [tests](../../tests/test_nc_networks.py) | Hidden concat/output average, gradients hữu hạn và trainer pass; chờ tích hợp PR |
+| 2026-10-16 | A12 | Review | [Báo cáo](../../report/week07/member_a.md), [JUnit](../../results/week07/junit.xml), [results](../../results/week07/comparison.csv) | 131 passed, 1 skipped vì CPU; hai run validation Cora, không chấm test; chờ tích hợp PR |
 
 Khi cần, thêm dòng với: `ngày | task ID | trạng thái | commit/PR/run/report | lệnh và kết quả kiểm tra; blocker; bước tiếp theo`. Không ghi Done chỉ vì đã commit hoặc push.

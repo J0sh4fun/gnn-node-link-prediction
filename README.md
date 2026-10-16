@@ -3,7 +3,8 @@
 Phase 1 (Weeks 1–4) provides the feature-only MLP baseline, fixed link splits,
 cosine validation baseline, sparse graph operations and training utilities.
 Member A owns node classification/GCN; Member B owns link prediction/GAT.
-Week 5 GCNLayer is implemented; complete GCN/GAT networks remain Phase 2 work.
+Week 5–6 GCN/GAT layers are integrated. Week 7 adds independent two-layer
+classifiers and Cora validation runs; see the report below for review status.
 
 Requirements: [Plan_GNN.md](Plan_GNN.md) links to the integrated plan.
 Member A: [implementation plan](docs/plans/member_a_plan.md) and
@@ -273,3 +274,15 @@ This compares matched weights/configurations on synthetic sparse graphs,
 including Cora-sized cases, without loading Cora or scoring held-out labels.
 [Reference timings](results/week06/gat_benchmark.json) include all samples,
 environment/config and provenance. Timing is descriptive, with no speed threshold.
+## Node Classification tuần 7
+
+Chạy GCN/GAT hai tầng độc lập, chỉ đánh giá validation, với cache Cora hiện có:
+
+```powershell
+python -m scripts.node_classification --output-dir runs/week07-new
+```
+
+Cấu hình: [week07](configs/node_classification_week07.json). Mỗi lần chạy dùng
+thư mục mới; config, environment, lịch sử và best checkpoint được lưu cùng run.
+Xem [báo cáo A10–A12](report/week07/member_a.md) và
+[bảng validation MLP/GCN/GAT](results/week07/comparison.csv). Final test thuộc tuần 8.
