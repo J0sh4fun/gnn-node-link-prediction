@@ -14,7 +14,8 @@ Week 6 GAT work to B, including tests and acceptance, without cross-member
 tasks in those weeks. See the [Week 5 progress review](report/week05/progress_review.md)
 and [B's Week 6 checklist](docs/plans/member_b_week06_todo.md).
 The [Week 6 progress review](report/week06/progress_review.md) records the GAT
-acceptance results and the remaining benchmark and handoff work.
+initial audit. The [completed Week 6 handoff](report/week06/member_b.md) includes
+the GAT API, acceptance evidence and matched runtime benchmark.
 The [todo synchronization guide](docs/plans/todo_sync.md) and
 [job completion rules](AGENTS.md) require updating todos at the end of each job,
 with the job's changes in the same branch/PR.
@@ -254,3 +255,21 @@ acceptance results and pending human review. Run the focused checks with:
 ```powershell
 .venv/Scripts/python.exe -m pytest tests/test_gcn_layer.py tests/test_graph_ops.py tests/test_trainer.py -q -s
 ```
+
+## Week 6 GAT layer and benchmark
+
+`from models import GATLayer` exposes the custom multi-head layer.
+`GATLayer(in_channels, out_channels, heads=8, concat=True)` returns
+`[N, heads*out_channels]`; `concat=False` averages heads to `[N, out_channels]`.
+Self-loops are enabled by default; activation and feature dropout belong to
+the enclosing network. See [B's handoff](report/week06/member_b.md) for the
+full contract, attention inspection and acceptance results.
+
+```powershell
+.venv/Scripts/python.exe -m scripts.benchmark_gat --config configs/gat_benchmark.json --output runs/gat-benchmark/result.json
+```
+
+This compares matched weights/configurations on synthetic sparse graphs,
+including Cora-sized cases, without loading Cora or scoring held-out labels.
+[Reference timings](results/week06/gat_benchmark.json) include all samples,
+environment/config and provenance. Timing is descriptive, with no speed threshold.
