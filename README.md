@@ -20,6 +20,8 @@ Dự án nghiên cứu và triển khai Graph Neural Networks (GCN & GAT) cho ha
   - Kiểm toán rò rỉ dữ liệu (leakage audit): `notebooks/member_b/week02/03_leakage_audit.ipynb`.
   - Baseline Cosine Similarity trên node features (Validation ROC-AUC 0.81217 / AP 0.82480): `notebooks/member_b/week03/`.
   - Thiết kế và kiểm thử prototype GAT, neighborhood attention & training framework: `notebooks/member_b/week04/`.
+  - Tầng GAT tự cài đặt (MessagePassing, grouped softmax, multi-head): `models/gat_layer.py`.
+  - Bộ kiểm thử toàn diện cho GATLayer: `tests/test_gat_layer.py`.
   - Báo cáo tiến độ theo tuần: `report/week01/` đến `report/week04/`.
 
 ---
