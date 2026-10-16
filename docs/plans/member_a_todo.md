@@ -2,22 +2,33 @@
 
 Cập nhật: **2026-10-15**. [Kế hoạch A](member_a_plan.md) · [Kế hoạch dự án](project_plan.md).
 
-PR kế hoạch và tracker: [#3 — Member A plan and progress checklist](https://github.com/J0sh4fun/gnn-node-link-prediction/pull/3), nhánh `docs/member-a-plan` → `main`, Ready for review. Đây là PR tài liệu; PR triển khai từng task được ghi riêng khi có.
+Đồng bộ todo: **2026-10-16**. [Cơ chế tự động](todo_sync.md).
+
+PR kế hoạch và tracker: [#3 — Member A plan and progress checklist](https://github.com/J0sh4fun/gnn-node-link-prediction/pull/3), đã merge. PR triển khai từng task được ghi riêng khi có.
 
 ## Cách theo dõi
 
 - **To do**: chưa bắt đầu; ghi rõ blocker nếu thiếu đầu vào. **Doing**: đang làm. **Review**: đã có đầu ra và kiểm tra, còn chờ review/merge. **Done**: đã nghiệm thu và tích hợp `main`.
 - Checkbox `[x]` chỉ dành cho Done. Task Review vẫn để `[ ]` dù code đã viết xong. Cập nhật cuối mỗi task và cuối tuần; thêm PR/commit và bằng chứng vào bảng nhật ký bên dưới.
-- Tuần là tuần tương đối theo kế hoạch gốc. Các mục A01–A05 được ghi nhận từ artifact đã có trên `main`. Tuần 5 đã chạy lại kiểm thử ngày 2026-10-15: kỹ thuật hoàn tất, tracker giữ Review để theo dõi phần chưa merge. Không có task tuần 6 của A; B tự thực hiện toàn bộ tuần đó.
+- Tuần là tuần tương đối theo kế hoạch gốc. Các mục A01–A05 được ghi nhận từ artifact đã có trên `main`. Tuần 5 đã chạy lại kiểm thử ngày 2026-10-15; trạng thái tích hợp hiện tại của A06/A07 được đồng bộ trong bảng bên dưới. Không có task tuần 6 của A; B tự thực hiện toàn bộ tuần đó.
 - Khi hoàn tất triển khai task: cập nhật Review → commit riêng → push → PR Ready for review vào `main`. Sau review/checks và merge mới chuyển Done. Chi tiết tại [quy trình](member_a_plan.md#quy-trình-hoàn-thành-từng-task).
 
-## Tổng quan ban đầu
+## Tiến độ hiện tại
 
+<!-- todo-sync:summary:start -->
 | To do | Doing | Review | Done | Tổng |
 |---:|---:|---:|---:|---:|
-| 15 | 0 | 2 | 5 | 22 |
+| 15 | 0 | 0 | 7 | 22 |
 
-Tiến độ tích hợp theo số task A: **5/22 Done (~23%)**. A08/A09 cũ đã chuyển sang B, không còn trong mẫu số. Riêng tuần 5 đạt **6/6 tiêu chí kỹ thuật**, đang chờ tích hợp PR, không chờ B. Các task có kích thước khác nhau; đây không phải phần trăm khối lượng hoặc thời gian dự án. Cập nhật lại bảng này khi đổi trạng thái.
+**7/22 task đã nghiệm thu và tích hợp main.** Số task không biểu thị phần trăm khối lượng.
+
+- **A06 · Done** — [PR #4](https://github.com/J0sh4fun/gnn-node-link-prediction/pull/4). Đã merge vào main; code/test khớp phiên bản đã nghiệm thu.
+- **A07 · Done** — [PR #4](https://github.com/J0sh4fun/gnn-node-link-prediction/pull/4). Đã merge vào main; code/test khớp phiên bản đã nghiệm thu.
+
+Task chưa có quy tắc bằng chứng giữ trạng thái thủ công; không suy diễn từ tên file/PR.
+<!-- todo-sync:summary:end -->
+
+A08/A09 cũ đã chuyển sang B, không còn trong mẫu số. Phân công tuần 5/6 độc lập giữa hai thành viên.
 
 ## Checklist thực hiện
 
@@ -31,8 +42,8 @@ Tiến độ tích hợp theo số task A: **5/22 Done (~23%)**. A08/A09 cũ đ�
 
 ### Tuần 5 — A tự hoàn tất GCNLayer
 
-- [ ] **A06 · Tuần 5 · Review** — A tự cài GCNLayer, viết/chạy unit test và đối chiếu đủ sáu Acceptance Criteria. Bằng chứng: [implementation và tests](https://github.com/J0sh4fun/gnn-node-link-prediction/tree/35a5d01a47f292c66ed96c96f175fdd05329515b), [báo cáo kiểm tra mới](../../report/week05/progress_review.md): **66 passed**, 6/6 tiêu chí đạt. Kỹ thuật đã hoàn tất; còn merge code vào `main`, không yêu cầu B kiểm thử/review/xác nhận.
-- [ ] **A07 · Tuần 5 · Review** — A tự nghiệm thu, ghi API/thiết kế MessagePassing, báo cáo và chuẩn bị PR GCN vào `main`. Phụ thuộc A06. Báo cáo đã cập nhật và [PR #4](https://github.com/J0sh4fun/gnn-node-link-prediction/pull/4) đã Ready for review. Chuyển Done khi PR tích hợp; không có phụ thuộc B.
+- [x] **A06 · Tuần 5 · Done** — A tự cài GCNLayer, viết/chạy unit test và đối chiếu đủ sáu Acceptance Criteria. Bằng chứng: [implementation và tests](https://github.com/J0sh4fun/gnn-node-link-prediction/tree/35a5d01a47f292c66ed96c96f175fdd05329515b), [báo cáo kiểm tra](../../report/week05/progress_review.md): **66 passed**, 6/6 tiêu chí đạt. Trạng thái theo PR #4 và bằng chứng code/test; không yêu cầu B kiểm thử/review/xác nhận.
+- [x] **A07 · Tuần 5 · Done** — A tự nghiệm thu, ghi API/thiết kế MessagePassing, báo cáo và chuẩn bị PR GCN vào `main`. Phụ thuộc A06. Theo dõi tích hợp qua [PR #4](https://github.com/J0sh4fun/gnn-node-link-prediction/pull/4); không có phụ thuộc B.
 
 ### Tuần 6 — Chuyển toàn bộ sang B
 

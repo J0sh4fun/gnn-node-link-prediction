@@ -57,7 +57,7 @@ Metric NC: Accuracy và Macro-F1; LP: ROC-AUC và AP. Benchmark tham khảo khô
 
 1. Chọn một task đủ phụ thuộc, chuyển **Doing** trong [todo](member_a_todo.md); dùng nhánh riêng từ `origin/main` đã cập nhật, đặt tên `feature/a-<id>-<mo-ta>` hoặc `docs/a-<id>-<mo-ta>`.
 2. Hoàn tất đầu ra và tiêu chí nghiệm thu. Chạy kiểm tra phù hợp phạm vi; tài liệu kiểm tra diff/link, code chạy test liên quan. Không chạy lại final test Cora để kiểm tra sửa tài liệu hoặc refactor.
-3. Cập nhật task thành **Review**, thêm bằng chứng, lệnh/kết quả kiểm tra và mục còn chờ; chỉ stage file của task, giữ nguyên thay đổi ngoài phạm vi.
+3. Sau mỗi job, cập nhật task thành **Review** khi đủ đầu ra, thêm bằng chứng, lệnh/kết quả kiểm tra và mục còn chờ; chạy `python -m scripts.sync_todos --github --write` trước commit cuối. Đưa todo vào cùng commit/nhánh của job, chỉ stage file liên quan và giữ nguyên thay đổi ngoài phạm vi. Không dùng lịch hằng ngày hoặc tạo PR riêng chỉ để cập nhật todo.
 4. Tạo commit cho task, ví dụ `feat(A10): add two-layer GCN network`, rồi push nhánh lên GitHub ngay khi task đủ điều kiện review. Một task lớn có thể có nhiều commit; không gom nhiều task độc lập vào một commit.
 5. Tạo PR trạng thái **Ready for review**, base `main`. Mô tả gồm task ID, thay đổi, tiêu chí đã đạt, kiểm tra, phụ thuộc và giới hạn. Nếu nhiều task liên quan ở cùng PR, mỗi task vẫn có commit riêng và đủ bằng chứng.
 6. Sửa góp ý bằng commit mới và push vào cùng PR. Ghi URL PR trong todo sau khi có URL; không tạo commit chỉ để tự ghi hash của chính nó.

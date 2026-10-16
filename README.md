@@ -13,6 +13,11 @@ The 2026-10-15 ownership update assigns all Week 5 GCN work to A and all
 Week 6 GAT work to B, including tests and acceptance, without cross-member
 tasks in those weeks. See the [Week 5 progress review](report/week05/progress_review.md)
 and [B's Week 6 checklist](docs/plans/member_b_week06_todo.md).
+The [Week 6 progress review](report/week06/progress_review.md) records the GAT
+acceptance results and the remaining benchmark and handoff work.
+The [todo synchronization guide](docs/plans/todo_sync.md) and
+[job completion rules](AGENTS.md) require updating todos at the end of each job,
+with the job's changes in the same branch/PR.
 See [cleanup and handoff](docs/phase1_cleanup.md) for semantic comparisons,
 compatibility decisions, unresolved issues and verification limits.
 
