@@ -66,3 +66,8 @@ thái hiện tại nằm trong checklist và block `todo-sync:summary`.
 - Đồng bộ với API GitHub thật: A06/A07 Done sau PR #4; B06-01/B06-02 Review theo PR #6; A có 7/22 Done, B tuần 6 có 0/4 Done.
 - Chạy lại cùng snapshot offline: không có thay đổi, exit 0.
 - Workflow pass actionlint 1.7.12 (tải bản chính thức, kiểm tra SHA256); không chạy workflow GitHub trước khi merge vào main.
+
+Trạng thái kích hoạt khi kiểm tra: PR #7 đang mở, không conflict; workflow
+chưa nằm trên main. Quyền Actions tạo PR hiện tắt. Automatic approval review
+đã từ chối bật tùy chọn gộp tạo/phê duyệt PR vì đây là thay đổi quyền toàn repo;
+đang chờ người dùng cho phép rõ ràng. Không có cài đặt quyền nào bị thay đổi.
