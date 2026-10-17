@@ -35,7 +35,7 @@ Tuần 7 A10–A12 đã nghiệm thu kỹ thuật và tích hợp `main` qua
 nhánh `feature/a-week07-node-classification` → `main`.
 [Báo cáo và lệnh tái lập](../../report/week07/member_a.md). API GitHub ngày 2026-10-17 xác nhận merge commit `7074f7d3`; đối chiếu source tuần 7 trên main và 136 passed/1 skip của suite hiện tại.
 
-Tuần 8: GCN/GAT đã đủ đầu ra kỹ thuật; **A13/A14 Review**, chờ tích hợp bản sửa dropout và artifact GAT. [Báo cáo hoàn tất](../../report/week08/completion.md). GAT test đã chạy lại theo yêu cầu người dùng, là ngoại lệ protocol một lần; không tự ghi nhận check-in/phê duyệt cá nhân.
+Tuần 8: GCN/GAT đã đủ đầu ra kỹ thuật; **A13/A14 Review** tại [PR #12](https://github.com/J0sh4fun/gnn-node-link-prediction/pull/12), chờ tích hợp bản sửa dropout và artifact GAT. [Báo cáo hoàn tất](../../report/week08/completion.md). GAT test đã chạy lại theo yêu cầu người dùng, là ngoại lệ protocol một lần; không tự ghi nhận check-in/phê duyệt cá nhân.
 
 ## Checklist thực hiện
 
@@ -114,3 +114,5 @@ Khi cần, thêm dòng với: `ngày | task ID | trạng thái | commit/PR/run/r
 | 2026-10-17 | A13 | Review | [Handoff và phân tích merge](../experiments/week08_gat_handoff.md), [config](../../results/week08/gat_handoff.json) | Nhận B config 7; sửa dropout alias, validation khớp bản gốc; 145 passed/1 skip; chờ merge bản sửa |
 
 | 2026-10-17 | A14 | Review | [Báo cáo hoàn tất](../../report/week08/completion.md), [GAT final](../../results/week08/final-gat/summary.json), [audit](../../results/week08/completion_audit.json) | Người dùng cho phép chạy lại GAT test; validation/final khớp B, checkpoint/predictions/masks đủ; không chạy lại MLP/GCN; chờ merge, giữ ngoại lệ protocol |
+
+| 2026-10-17 | A13/A14 | Review | [PR #12](https://github.com/J0sh4fun/gnn-node-link-prediction/pull/12), commits `c1db6256` (A13) / `df71110d` (A14) | Đủ artifact, 145 passed/1 skip; giữ ngoại lệ GAT repeat do người dùng cho phép; chờ nghiệm thu/merge |

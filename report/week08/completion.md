@@ -1,7 +1,7 @@
 # Mốc tuần 8 — Đối chiếu GCN/GAT và hoàn tất đầu ra kỹ thuật
 
 Ngày kiểm chứng: **2026-10-17**. A13/A14: **Review**, chờ review/merge bản hoàn tất.
-Đã đủ cấu hình, kết quả NC và artifact; **có ngoại lệ protocol GAT chạy lại test theo yêu cầu người dùng**.
+[PR #12](https://github.com/J0sh4fun/gnn-node-link-prediction/pull/12) Ready for review. Đã đủ cấu hình, kết quả NC và artifact; **có ngoại lệ protocol GAT chạy lại test theo yêu cầu người dùng**.
 Không khẳng định đáp ứng nguyên tắc test một lần cho GAT; không ghi nhận cuộc họp
 check-in 2 hoặc phê duyệt cá nhân đã diễn ra. Báo cáo A/B trước đây giữ làm snapshot lịch sử.
 
