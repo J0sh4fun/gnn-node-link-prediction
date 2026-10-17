@@ -1,0 +1,4 @@
+............................GCN sanity: loss 1.067625 -> 0.025040; accuracy 100.0%
+......................................
+- generated xml file: D:\My workspace\Project\AI\gnn-node-link-prediction\results\week05\member_b_junit.xml -
+66 passed in 6.29s

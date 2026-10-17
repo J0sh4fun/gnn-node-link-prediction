@@ -1,0 +1,5 @@
+Python 3.11.9 torch 2.7.1+cpu PyG 2.7.0
+.......................................GCN sanity: loss 1.067625 -> 0.025040; accuracy 100.0%
+......................................
+- generated xml file: D:\My workspace\Project\AI\gnn-node-link-prediction\runs\week06-audit\junit.xml -
+77 passed in 7.05s

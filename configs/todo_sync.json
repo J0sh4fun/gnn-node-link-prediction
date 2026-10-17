@@ -1,0 +1,40 @@
+{
+  "repository": "J0sh4fun/gnn-node-link-prediction",
+  "base": "main",
+  "trackers": [
+    "docs/plans/member_a_todo.md",
+    "docs/plans/member_b_week06_todo.md"
+  ],
+  "verified_tasks": {
+    "A06": {"pr": 4, "evidence": "gcn"},
+    "A07": {"pr": 4, "evidence": "gcn"},
+    "B06-01": {"pr": 6, "evidence": "gat"},
+    "B06-02": {"pr": 6, "evidence": "gat"},
+    "B06-03": {"pr": 8, "evidence": "gat_week06_complete"},
+    "B06-04": {"pr": 8, "evidence": "gat_week06_complete"}
+  },
+  "evidence": {
+    "gcn": {
+      "revision": "35a5d01a47f292c66ed96c96f175fdd05329515b",
+      "sources": ["models/gcn_layer.py", "utils/graph_ops.py", "tests/test_gcn_layer.py", "tests/test_graph_ops.py", "tests/test_trainer.py", "train/trainer.py", "requirements.txt"],
+      "junit": "results/week05/member_a_progress_junit.xml",
+      "expected_tests": 66,
+      "report": "report/week05/progress_review.md"
+    },
+    "gat": {
+      "revision": "f5c441e1d274fbe8f4332a98bb04d0c62e89f1d3",
+      "sources": ["models/gat_layer.py", "tests/test_gat_layer.py", "requirements.txt"],
+      "junit": "results/week06/progress_junit.xml",
+      "expected_tests": 77,
+      "report": "report/week06/progress_review.md",
+      "sanity": "results/week06/gat_sanity_observation.json"
+    },
+    "gat_week06_complete": {
+      "revision": "f8fa506ca763d6b5ffbdf253c043564abe316390",
+      "sources": ["models/gat_layer.py", "tests/test_gat_layer.py", "scripts/benchmark_gat.py", "tests/test_benchmark_gat.py", "configs/gat_benchmark.json", "requirements.txt", "results/week06/gat_benchmark.json", "results/week06/completion_junit.xml", "results/week06/completion_pytest.txt", "report/week06/member_b.md"],
+      "junit": "results/week06/completion_junit.xml",
+      "expected_tests": 101,
+      "report": "report/week06/member_b.md"
+    }
+  }
+}

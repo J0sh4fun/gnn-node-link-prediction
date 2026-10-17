@@ -1,154 +1,246 @@
-"""Sparse, multi-head graph attention layer implemented with PyTorch ops."""
+"""Custom Graph Attention Network (GAT) Layer.
+
+Implements the multi-head graph attentional layer according to:
+"Graph Attention Networks" (Veličković et al., ICLR 2018).
+
+This implementation inherits from ``torch_geometric.nn.MessagePassing``,
+manually implementing attention coefficient projection, neighborhood
+softmax normalization, multi-head concat/average, and edge validation.
+"""
 
 from __future__ import annotations
 
-import math
-
 import torch
-from torch import nn
-from torch.nn import functional as F
+import torch.nn as nn
+import torch.nn.functional as F
+from torch_geometric.nn.conv import MessagePassing
+from torch_geometric.utils import remove_self_loops, softmax
 
-from utils.attention import receiver_softmax
 
+class GATLayer(MessagePassing):
+    r"""Graph Attention Network (GAT) layer.
 
-class GATLayer(nn.Module):
-    """A single GAT layer using source-to-target train adjacency.
+    .. math::
+        \mathbf{x}^{\prime}_i = \alpha_{i,i}\mathbf{\Theta}\mathbf{x}_i +
+        \sum_{j \in \mathcal{N}(i)} \alpha_{i,j}\mathbf{\Theta}\mathbf{x}_j,
 
-    Attention scores and aggregation are computed only for listed edges; this
-    layer never constructs a dense num_nodes by num_nodes attention matrix.
+    where the attention coefficients :math:`\alpha_{i,j}` are computed as:
 
-    Dropout is applied to normalized attention weights; feature_dropout is
-    applied to input node features. No activation is applied inside the layer.
+    .. math::
+        \alpha_{i,j} =
+        \frac{
+        \exp\left(\mathrm{LeakyReLU}\left(\mathbf{a}^{\top}
+        [\mathbf{\Theta}\mathbf{x}_i \,\|\, \mathbf{\Theta}\mathbf{x}_j]
+        \right)\right)}
+        {\sum_{k \in \mathcal{N}(i) \cup \{ i \}}
+        \exp\left(\mathrm{LeakyReLU}\left(\mathbf{a}^{\top}
+        [\mathbf{\Theta}\mathbf{x}_i \,\|\, \mathbf{\Theta}\mathbf{x}_k]
+        \right)\right)}.
+
+    Args:
+        in_channels (int): Size of each input sample.
+        out_channels (int): Size of each output head sample.
+        heads (int, optional): Number of multi-head-attentions. (default: ``8``)
+        concat (bool, optional): If set to ``False``, the multi-head
+            attentions are averaged instead of concatenated. (default: ``True``)
+        negative_slope (float, optional): LeakyReLU angle of the negative slope.
+            (default: ``0.2``)
+        dropout (float, optional): Dropout probability of the normalized
+            attention coefficients. (default: ``0.0``)
+        add_self_loops (bool, optional): If set to ``True``, will add a
+            single self-loop per node to the input graph. (default: ``True``)
+        bias (bool, optional): If set to ``False``, the layer will not learn
+            an additive bias. (default: ``True``)
     """
 
     def __init__(
         self,
         in_channels: int,
         out_channels: int,
-        heads: int = 1,
+        heads: int = 8,
         concat: bool = True,
-        dropout: float = 0.0,
         negative_slope: float = 0.2,
+        dropout: float = 0.0,
         add_self_loops: bool = True,
         bias: bool = True,
-        feature_dropout: float = 0.0,
+        **kwargs,
     ) -> None:
-        super().__init__()
-        for name, value in (
-            ("in_channels", in_channels),
-            ("out_channels", out_channels),
-            ("heads", heads),
-        ):
-            if not isinstance(value, int) or isinstance(value, bool) or value <= 0:
-                raise ValueError(f"{name} must be a positive integer")
-        for name, value in (("dropout", dropout), ("feature_dropout", feature_dropout)):
-            if not isinstance(value, (int, float)) or not 0.0 <= value <= 1.0:
-                raise ValueError(f"{name} must be between 0 and 1")
-        if (
-            not isinstance(negative_slope, (int, float))
-            or not math.isfinite(negative_slope)
-            or negative_slope < 0
-        ):
-            raise ValueError("negative_slope must be a finite non-negative number")
-        if not isinstance(concat, bool) or not isinstance(add_self_loops, bool):
-            raise ValueError("concat and add_self_loops must be bool values")
-        if not isinstance(bias, bool):
-            raise ValueError("bias must be a bool value")
+        super().__init__(aggr="add", node_dim=0, **kwargs)
+
+        if not isinstance(in_channels, int) or in_channels <= 0:
+            raise ValueError("in_channels must be a positive integer")
+        if not isinstance(out_channels, int) or out_channels <= 0:
+            raise ValueError("out_channels must be a positive integer")
+        if not isinstance(heads, int) or heads <= 0:
+            raise ValueError("heads must be a positive integer")
 
         self.in_channels = in_channels
         self.out_channels = out_channels
         self.heads = heads
         self.concat = concat
-        self.dropout = float(dropout)
-        self.feature_dropout = float(feature_dropout)
-        self.negative_slope = float(negative_slope)
+        self.negative_slope = negative_slope
+        self.dropout = dropout
         self.add_self_loops = add_self_loops
 
-        self.proj = nn.Linear(in_channels, heads * out_channels, bias=False)
+        # Linear projection: W * x
+        self.lin = nn.Linear(in_channels, heads * out_channels, bias=False)
+
+        # Decoupled attention parameters:
+        # a^T [Wh_i || Wh_j] = a_dst^T Wh_i + a_src^T Wh_j
         self.att_src = nn.Parameter(torch.empty(1, heads, out_channels))
         self.att_dst = nn.Parameter(torch.empty(1, heads, out_channels))
-        output_channels = heads * out_channels if concat else out_channels
-        self.bias = nn.Parameter(torch.empty(output_channels)) if bias else None
+
+        if bias:
+            out_dim = heads * out_channels if concat else out_channels
+            self.bias = nn.Parameter(torch.empty(out_dim))
+        else:
+            self.register_parameter("bias", None)
+
+        self._current_alpha: torch.Tensor | None = None
         self.reset_parameters()
 
     def reset_parameters(self) -> None:
-        """Reset projection, attention vectors, and optional bias."""
-        nn.init.xavier_uniform_(self.proj.weight)
+        """Reset layer parameters with Glorot/Xavier uniform initialization."""
+        nn.init.xavier_uniform_(self.lin.weight)
         nn.init.xavier_uniform_(self.att_src)
         nn.init.xavier_uniform_(self.att_dst)
         if self.bias is not None:
             nn.init.zeros_(self.bias)
 
-    def _prepare_edges(self, edge_index: torch.Tensor, num_nodes: int) -> torch.Tensor:
-        if not isinstance(edge_index, torch.Tensor):
-            raise TypeError("train_adjacency must be a torch.Tensor")
-        if edge_index.dtype != torch.long:
-            raise ValueError("train_adjacency must have dtype torch.long")
-        if edge_index.ndim != 2 or edge_index.shape[0] != 2:
-            raise ValueError("train_adjacency must have shape [2, num_edges]")
-        if edge_index.device != self.proj.weight.device:
-            raise ValueError(
-                "train_adjacency and layer parameters must be on the same device"
-            )
-        if edge_index.numel() and (edge_index.min() < 0 or edge_index.max() >= num_nodes):
-            raise ValueError("train_adjacency contains an index outside [0, num_nodes)")
+    def _validate_inputs(self, x: torch.Tensor, edge_index: torch.Tensor) -> int:
+        """Validate input tensor types, shapes, and index bounds."""
+        if not isinstance(x, torch.Tensor) or x.ndim != 2 or not x.is_floating_point():
+            raise ValueError("x must be a 2D floating-point tensor of shape [num_nodes, in_channels]")
+        if x.size(1) != self.in_channels:
+            raise ValueError(f"Expected input feature dim {self.in_channels}, got {x.size(1)}")
 
-        if not self.add_self_loops:
-            return edge_index
+        num_nodes = x.size(0)
 
-        non_loops = edge_index[:, edge_index[0] != edge_index[1]]
-        loops = torch.arange(num_nodes, dtype=torch.long, device=edge_index.device)
-        loops = torch.stack((loops, loops))
-        return torch.cat((non_loops, loops), dim=1)
+        if (
+            not isinstance(edge_index, torch.Tensor)
+            or edge_index.ndim != 2
+            or edge_index.size(0) != 2
+            or edge_index.dtype != torch.long
+        ):
+            raise ValueError("edge_index must be a torch.long tensor of shape [2, num_edges]")
+
+        if edge_index.numel() > 0:
+            min_idx = edge_index.min().item()
+            max_idx = edge_index.max().item()
+            if min_idx < 0 or max_idx >= num_nodes:
+                raise ValueError(
+                    f"Edge indices must lie in [0, num_nodes). Got min {min_idx}, max {max_idx} with num_nodes={num_nodes}"
+                )
+
+        return num_nodes
 
     def forward(
         self,
         x: torch.Tensor,
-        train_adjacency: torch.Tensor,
-        return_attention: bool = False,
+        edge_index: torch.Tensor,
+        return_attention_weights: bool = False,
     ) -> torch.Tensor | tuple[torch.Tensor, tuple[torch.Tensor, torch.Tensor]]:
-        """Apply sparse multi-head attention over the supplied graph edges."""
-        if not isinstance(x, torch.Tensor) or x.ndim != 2:
-            raise ValueError("x must be a tensor with shape [num_nodes, in_channels]")
-        if x.shape[1] != self.in_channels:
-            raise ValueError(f"x has {x.shape[1]} features; expected {self.in_channels}")
-        if not x.is_floating_point():
-            raise ValueError("x must have a floating-point dtype")
-        if x.device != self.proj.weight.device:
-            raise ValueError("x and layer parameters must be on the same device")
-        if x.dtype != self.proj.weight.dtype:
-            raise ValueError("x and layer parameters must have the same dtype")
-        if not isinstance(return_attention, bool):
-            raise ValueError("return_attention must be a bool value")
+        """Forward pass of the GAT layer.
 
-        num_nodes = x.shape[0]
-        processed_edges = self._prepare_edges(train_adjacency, num_nodes)
-        source, target = processed_edges
+        Args:
+            x (torch.Tensor): Node feature matrix [N, in_channels].
+            edge_index (torch.Tensor): Graph edge indices [2, E].
+            return_attention_weights (bool, optional): If True, returns a tuple
+                (out, (edge_index_out, alpha)) containing normalized attention weights.
 
-        features = F.dropout(x, p=self.feature_dropout, training=self.training)
-        projected = self.proj(features).view(num_nodes, self.heads, self.out_channels)
-        source_term = (projected * self.att_src).sum(dim=-1)
-        target_term = (projected * self.att_dst).sum(dim=-1)
-        scores = F.leaky_relu(
-            source_term[source] + target_term[target],
-            negative_slope=self.negative_slope,
+        Returns:
+            torch.Tensor or (torch.Tensor, (torch.Tensor, torch.Tensor)): Output node
+            representations of shape [N, heads * out_channels] (if concat=True) or
+            [N, out_channels] (if concat=False).
+        """
+        num_nodes = self._validate_inputs(x, edge_index)
+
+        # Handle self-loops
+        if self.add_self_loops:
+            edge_index, _ = remove_self_loops(edge_index)
+            loop_nodes = torch.arange(num_nodes, dtype=torch.long, device=edge_index.device)
+            loop_edges = torch.stack((loop_nodes, loop_nodes), dim=0)
+            edge_index = torch.cat((edge_index, loop_edges), dim=1)
+
+        # Linear projection: [N, heads, out_channels]
+        h = self.lin(x).view(-1, self.heads, self.out_channels)
+
+        # Precompute attention projections per node:
+        # alpha_src = a_src^T (Wh) [N, heads]
+        # alpha_dst = a_dst^T (Wh) [N, heads]
+        alpha_src = (h * self.att_src).sum(dim=-1)
+        alpha_dst = (h * self.att_dst).sum(dim=-1)
+
+        self._current_alpha = None
+
+        # Message passing:
+        # In PyG source-to-target flow: edge_index[0] is source j, edge_index[1] is target i.
+        # propagate passes alpha=(alpha_src, alpha_dst) where:
+        # alpha_j corresponds to source node, alpha_i corresponds to target node.
+        out = self.propagate(
+            edge_index,
+            h=h,
+            alpha=(alpha_src, alpha_dst),
+            size=(num_nodes, num_nodes),
         )
-        alpha = receiver_softmax(scores, target, num_nodes)
-        dropped_alpha = F.dropout(alpha, p=self.dropout, training=self.training)
 
-        messages = projected[source] * dropped_alpha.unsqueeze(-1)
-        output = projected.new_zeros((num_nodes, self.heads, self.out_channels))
-        output.index_add_(0, target, messages)
+        alpha = self._current_alpha
+        self._current_alpha = None
+
+        # Multi-head combination
         if self.concat:
-            output = output.reshape(num_nodes, self.heads * self.out_channels)
+            out = out.view(-1, self.heads * self.out_channels)
         else:
-            output = output.mean(dim=1)
+            out = out.mean(dim=1)
+
         if self.bias is not None:
-            output = output + self.bias
+            out = out + self.bias
 
-        if return_attention:
-            return output, (processed_edges, alpha)
-        return output
+        if return_attention_weights:
+            assert alpha is not None
+            return out, (edge_index, alpha)
 
+        return out
 
-__all__ = ["GATLayer"]
+    def message(
+        self,
+        h_j: torch.Tensor,
+        alpha_j: torch.Tensor,
+        alpha_i: torch.Tensor,
+        index: torch.Tensor,
+        ptr: torch.Tensor | None,
+        size_i: int | None,
+    ) -> torch.Tensor:
+        """Constructs attention-weighted messages from neighboring nodes.
+
+        Args:
+            h_j: Projected source node features [E, heads, out_channels].
+            alpha_j: Source attention projection [E, heads].
+            alpha_i: Target attention projection [E, heads].
+            index: Target node indices for incoming messages [E].
+            ptr: Optional index pointer tensor.
+            size_i: Total number of target nodes.
+
+        Returns:
+            Attention-weighted messages [E, heads, out_channels].
+        """
+        # Unnormalized attention score: e_ij = LeakyReLU(alpha_dst_i + alpha_src_j)
+        e = F.leaky_relu(alpha_i + alpha_j, self.negative_slope)
+
+        # Grouped neighborhood softmax over incoming edges for each target node
+        alpha = softmax(e, index, ptr=ptr, num_nodes=size_i)
+
+        # Cache un-dropped attention coefficients for inspection / verification
+        self._current_alpha = alpha
+
+        # Apply attention dropout during training
+        alpha_drop = F.dropout(alpha, p=self.dropout, training=self.training)
+
+        # Weighted message: alpha_ij * Wh_j -> [E, heads, out_channels]
+        return h_j * alpha_drop.unsqueeze(-1)
+
+    def __repr__(self) -> str:
+        return (
+            f"{self.__class__.__name__}({self.in_channels}, {self.out_channels}, "
+            f"heads={self.heads}, concat={self.concat})"
+        )

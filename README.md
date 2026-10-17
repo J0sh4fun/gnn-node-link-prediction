@@ -3,9 +3,23 @@
 Phase 1 (Weeks 1–4) provides the feature-only MLP baseline, fixed link splits,
 cosine validation baseline, sparse graph operations and training utilities.
 Member A owns node classification/GCN; Member B owns link prediction/GAT.
-Complete GCN/GAT models remain Phase 2 work.
+Week 5–6 GCN/GAT layers are integrated. Week 7 adds independent two-layer
+classifiers and Cora validation runs; see the report below for review status.
 
-Requirements: [Plan_GNN.md](Plan_GNN.md) links to the unchanged integrated plan.
+Requirements: [Plan_GNN.md](Plan_GNN.md) links to the integrated plan.
+Member A: [implementation plan](docs/plans/member_a_plan.md) and
+[progress checklist](docs/plans/member_a_todo.md), including task-level commit,
+push and pull request workflow into `main`.
+The 2026-10-15 ownership update assigns all Week 5 GCN work to A and all
+Week 6 GAT work to B, including tests and acceptance, without cross-member
+tasks in those weeks. See the [Week 5 progress review](report/week05/progress_review.md)
+and [B's Week 6 checklist](docs/plans/member_b_week06_todo.md).
+The [Week 6 progress review](report/week06/progress_review.md) records the GAT
+initial audit. The [completed Week 6 handoff](report/week06/member_b.md) includes
+the GAT API, acceptance evidence and matched runtime benchmark.
+The [todo synchronization guide](docs/plans/todo_sync.md) and
+[job completion rules](AGENTS.md) require updating todos at the end of each job,
+with the job's changes in the same branch/PR.
 See [cleanup and handoff](docs/phase1_cleanup.md) for semantic comparisons,
 compatibility decisions, unresolved issues and verification limits.
 
@@ -18,7 +32,6 @@ compatibility decisions, unresolved issues and verification limits.
 ├── requirements.txt / environment.yml / pytest.ini
 ├── configs/                      # Existing LP protocol, cosine and toy-training config
 ├── models/mlp.py                 # Complete feature-only baseline
-├── models/gat_layer.py           # Hand-written sparse multi-head GAT layer
 ├── layers/projected_sum.py       # Existing Week 4 MessagePassing prototype
 ├── train/
 │   ├── train_mlp.py              # Fixed MLP fitting and legacy entry point
@@ -32,7 +45,7 @@ compatibility decisions, unresolved issues and verification limits.
 │   ├── graph_ops.py              # Torch sparse symmetric normalization / SpMM
 │   ├── link_graph.py             # NumPy edges, split/sampling, leakage audit
 │   ├── link_metrics.py           # Raw-float64 cosine and ROC-AUC/AP
-│   ├── attention.py              # Stable receiver-wise grouped softmax
+│   ├── attention.py              # Existing receiver-wise toy softmax
 │   ├── experiment.py             # Run hashes, seed and publication helpers
 │   └── paths.py                  # Checkout, cache and output preflight
 ├── scripts/                     # Thin CLIs: mlp_baseline, cosine_baseline, smoke
@@ -223,8 +236,68 @@ remain **0.812170 / 0.824801**. These are different tasks/metrics, not directly
 comparable. The temporary cosine validation smoke reproduced those values;
 the full MLP experiment and its held-out test evaluation were not rerun.
 
-Use these existing interfaces to implement Phase 2 GCN/GAT separately. Resolve
-the missing planned A `MessagePassingLayer` versus the documented sparse-SpMM
-design first. Working LP metrics are in `utils.link_metrics.lp_metrics`;
+Use these existing interfaces to implement Phase 2 GCN/GAT separately. The
+Week 5 GCNLayer now inherits PyG MessagePassing directly; it supersedes the sparse-SpMM
+layer proposal. Working LP metrics are in `utils.link_metrics.lp_metrics`;
 the old tensor `evaluate_link_prediction` stub remains intentionally
 unimplemented. See [handoff notes](docs/phase1_cleanup.md) for untouched issues.
+
+## Week 5 GCN layer
+
+`from models import GCNLayer` exposes `GCNLayer(in_channels, out_channels, bias=True)`.
+Call `layer(x, edge_index, edge_weight=None)` with raw undirected edges.
+Self-loops precede symmetric normalization; message passing uses sparse edges
+and bias is added after aggregation. Activation/dropout belong to the enclosing
+network. Normalization is recomputed for each call, including changed LP graphs.
+
+See [the Week 5 handoff](report/week05/member_a.md) for the input contract,
+acceptance results and pending human review. Run the focused checks with:
+
+```powershell
+.venv/Scripts/python.exe -m pytest tests/test_gcn_layer.py tests/test_graph_ops.py tests/test_trainer.py -q -s
+```
+
+## Week 6 GAT layer and benchmark
+
+`from models import GATLayer` exposes the custom multi-head layer.
+`GATLayer(in_channels, out_channels, heads=8, concat=True)` returns
+`[N, heads*out_channels]`; `concat=False` averages heads to `[N, out_channels]`.
+Self-loops are enabled by default; activation and feature dropout belong to
+the enclosing network. See [B's handoff](report/week06/member_b.md) for the
+full contract, attention inspection and acceptance results.
+
+```powershell
+.venv/Scripts/python.exe -m scripts.benchmark_gat --config configs/gat_benchmark.json --output runs/gat-benchmark/result.json
+```
+
+This compares matched weights/configurations on synthetic sparse graphs,
+including Cora-sized cases, without loading Cora or scoring held-out labels.
+[Reference timings](results/week06/gat_benchmark.json) include all samples,
+environment/config and provenance. Timing is descriptive, with no speed threshold.
+## Node Classification tuần 7
+
+Chạy GCN/GAT hai tầng độc lập, chỉ đánh giá validation, với cache Cora hiện có:
+
+```powershell
+python -m scripts.node_classification --output-dir runs/week07-new
+```
+
+Cấu hình: [week07](configs/node_classification_week07.json). Mỗi lần chạy dùng
+thư mục mới; config, environment, lịch sử và best checkpoint được lưu cùng run.
+Xem [báo cáo A10–A12](report/week07/member_a.md) và
+[bảng validation MLP/GCN/GAT](results/week07/comparison.csv). Final test thuộc tuần 8.
+
+
+## Node Classification tuần 8
+
+Search GCN định trước 11 cấu hình, seed 42; chọn bằng validation loss:
+
+```powershell
+python -m scripts.nc_week08 tune --output-dir runs/week08-new/search
+```
+
+[Báo cáo tuning/final](report/week08/member_a.md), [protocol](configs/node_classification_week08.json),
+[bảng final](results/week08/comparison.csv). Final GCN đã chạy một lần, có predictions/logits
+và masks trong `results/week08/final-gcn/`; không chạy lại final để kiểm tra tái lập.
+GAT final đang chờ cấu hình tuning của B. GCN hỗ trợ `num_layers >= 2`;
+mặc định hai tầng vẫn tương thích tuần 7.

@@ -1,0 +1,20 @@
+{
+  "dataset": "Cora",
+  "seed": 42,
+  "num_threads": 1,
+  "max_epochs": 200,
+  "patience": 20,
+  "selection": "minimum best_val_loss; ties use candidate order",
+  "search_method": "predeclared one-factor search, no adaptive expansion",
+  "base": {"hidden_dim": 16, "num_layers": 2, "dropout": 0.5, "learning_rate": 0.01, "weight_decay": 0.0005},
+  "candidates": [{}, {"learning_rate": 0.005}, {"learning_rate": 0.02}, {"num_layers": 3}, {"num_layers": 4}, {"hidden_dim": 32}, {"hidden_dim": 64}, {"dropout": 0.3}, {"dropout": 0.7}, {"weight_decay": 0.0}, {"weight_decay": 0.001}],
+  "budget": "11 fresh runs x at most 200 epochs; one fixed seed; no test access",
+  "week10_ablation": [
+    {"owner": "A", "factor": "GCN self-loop on/off", "rq": "RQ2/RQ4"},
+    {"owner": "A", "factor": "GCN depth 2/3/4; validation and mean pairwise cosine of hidden embeddings", "rq": "RQ4"},
+    {"owner": "A", "factor": "GCN hidden_dim 16/32/64", "rq": "RQ2/RQ4"},
+    {"owner": "B", "factor": "GAT heads 1/4/8, fixed total hidden width", "rq": "RQ2/RQ4"},
+    {"owner": "B", "factor": "LP dot-product/MLP decoder, fixed saved split", "rq": "RQ3/RQ4"}
+  ],
+  "error_analysis": "validation only; degree bins 0-2, 3-5, 6+ excluding self-loops; report counts, errors and confusion matrix; test analysis uses saved predictions only"
+}
