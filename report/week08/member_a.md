@@ -62,3 +62,42 @@ Cấu hình GCN đã đóng băng; final evaluator sẵn sàng. GAT chờ B bàn
 search space/budget/seed, metric selection, config, checkpoint/hash, versions,
 preprocessing/split và validation history. Sau đó A kiểm tra tương thích rồi mới
 chấm GAT một lần. Check-in 2 chưa hoàn tất khi thiếu GAT final.
+
+
+### GCN final đã hoàn tất
+
+Selection được commit trước final tại `0cf2917c`. Lệnh thực tế (Python 3.11.9 runtime local):
+
+```powershell
+runs/python311/python.exe -m scripts.nc_week08 final-gcn --run runs/week08-a/search --output-dir runs/week08-a/final-gcn
+```
+
+Restore đúng best checkpoint candidate 3, xác minh SHA-256 checkpoint/protocol,
+features/edges/train-val masks và source hashes khớp selection. Không retrain NC
+trên train+val. Claim `runs/week08-a/search/final_claim.json` được tạo exclusive
+trước đọc nhãn test; mọi lần gọi sau trên cùng run đều bị từ chối, kể cả đổi output.
+Claim còn nguyên khi lỗi; không tự retry. Đây là guard theo run, không phải khóa toàn
+repo: tuyệt đối không tạo run mới để chấm lại final. Bản sao claim được lưu cùng kết quả.
+
+[Final summary](../../results/week08/final-gcn/summary.json),
+[predictions/logits](../../results/week08/final-gcn/predictions.npz),
+[masks](../../results/week08/final-gcn/masks.npz),
+[bảng so sánh](../../results/week08/comparison.csv).
+Đã kiểm tra lại metrics bằng predictions đã lưu và hash file, không forward model
+hoặc đọc lại dataset để đánh giá lần hai.
+
+| Model | Test Accuracy | Test Macro-F1 | Nguồn |
+|---|---:|---:|---|
+| MLP | 56,80% | 53,87% | Final lịch sử, không chạy lại |
+| GCN | 82,10% | 81,07% | Final một lần, 1.000 test nodes |
+| GAT | Chờ B | Chờ B | Chưa có cấu hình đã tuning |
+
+RQ1: GCN hơn baseline MLP 25,30 điểm phần trăm Accuracy và 27,21 điểm Macro-F1,
+phù hợp với lợi ích của topology trong thiết lập Cora này. Một seed, budget/capacity
+khác MLP và không có ước lượng phương sai giới hạn kết luận tổng quát.
+RQ2 chưa có so sánh final GCN/GAT; không dùng validation GAT tuần 7 thay test.
+Không thay đổi search hoặc ablation sau khi thấy điểm test.
+
+A14: phần GCN hoàn tất kỹ thuật và sẵn sàng review; toàn task vẫn Doing do thiếu
+GAT final. MLP reuse đúng số lịch sử; check-in 2 và danh sách ablation chung cần B
+xác nhận/bàn giao. Không ghi nhận nghiệm thu cá nhân hoặc check-in đã diễn ra.
