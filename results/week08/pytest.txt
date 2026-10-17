@@ -1,0 +1,3 @@
+Command: runs/python311/python.exe -c "import torch,pytest; torch.set_num_threads(1); torch.manual_seed(42); raise SystemExit(pytest.main(['tests','-q','--junitxml=results/week08/junit.xml']))"
+136 passed, 1 skipped in 6.72s
+Skip: CUDA unavailable.

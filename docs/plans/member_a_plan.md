@@ -15,7 +15,8 @@ Tuần trong tài liệu là tuần tương đối của kế hoạch gốc, kh�
 | Tuần 5 | [Implementation và kiểm thử tại commit 35a5d01a](https://github.com/J0sh4fun/gnn-node-link-prediction/tree/35a5d01a47f292c66ed96c96f175fdd05329515b); [kiểm tra tiến độ mới](../../report/week05/progress_review.md) | Kỹ thuật hoàn tất: 66 tests pass, đạt 6/6 tiêu chí; A chuẩn bị tích hợp PR, không chờ B |
 | Tuần 6 | [GAT acceptance/benchmark/bàn giao của B](../../report/week06/member_b.md); PR #6/#8 đã merge khi đồng bộ GitHub 2026-10-16 | B06-01–B06-04 Done; đủ đầu vào tuần 7 |
 | Tuần 7 | [Nghiệm thu A10–A12](../../report/week07/member_a.md): GCN/GAT độc lập, validation Cora, 131 tests pass/1 skip CUDA | Hoàn tất kỹ thuật, Review chờ nghiệm thu/tích hợp PR; chưa chấm test |
-| Tuần 8–12 | Chưa thực hiện trong job tuần 7 | Giữ To do; tuning/final theo protocol tuần 8 |
+| Tuần 8 | [Tuning GCN 11 cấu hình](../../report/week08/member_a.md), 136 tests pass/1 skip | A13/A14 Doing, phần GAT chờ cấu hình tuning từ B; check-in 2 chưa hoàn tất |
+| Tuần 9–12 | Chưa triển khai; phạm vi ablation đã định trước trong protocol tuần 8 | Giữ To do |
 
 Đã kiểm tra lại tuần 5 ngày 2026-10-15 bằng test trên graph tổng hợp; không chạy benchmark Cora/test set. Xem báo cáo tiến độ để phân biệt kết quả kỹ thuật và trạng thái merge. Việc tự nghiệm thu thuộc A; kiểm chứng do Codex thực hiện không được ghi thành phê duyệt cá nhân.
 
