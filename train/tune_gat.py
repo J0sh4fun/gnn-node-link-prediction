@@ -23,6 +23,8 @@ import torch.nn as nn
 from models.gat import GAT
 from utils.data_loader import get_cora_data
 from utils.evaluate import evaluate_node_classification
+from utils.experiment import environment, mapping_hash, write_json
+from scripts.nc_week08 import digest
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -129,9 +131,17 @@ def run_grid_search(
     if output_dir is None:
         output_dir = REPO_ROOT / "results" / "week08"
     output_dir = Path(output_dir)
+    # A legacy final result is already a completed test evaluation. Never
+    # overwrite it or evade it by choosing another output directory.
+    for path in (REPO_ROOT / 'results/week08/gat_tuning.json', output_dir / 'gat_tuning.json'):
+        if path.exists() and 'final_test_evaluation' in json.loads(path.read_text(encoding='utf-8')):
+            raise RuntimeError('GAT final already exists; reuse saved results, do not rerun test')
     output_dir.mkdir(parents=True, exist_ok=True)
+    # Claim before loading data, including after failures or concurrent calls.
+    with (output_dir / 'gat_run_claim.json').open('x', encoding='utf-8') as handle:
+        json.dump({'seed': seed, 'max_epochs': max_epochs, 'patience': patience}, handle)
 
-    checkpoints_dir = REPO_ROOT / "results" / "checkpoints"
+    checkpoints_dir = output_dir / "checkpoints"
     checkpoints_dir.mkdir(parents=True, exist_ok=True)
 
     # Load Cora dataset
@@ -155,6 +165,15 @@ def run_grid_search(
         {"hidden_dim": 16, "heads": 8, "lr": 0.005, "weight_decay": 5e-4, "dropout": 0.4},
         {"hidden_dim": 16, "heads": 8, "lr": 0.01, "weight_decay": 5e-4, "dropout": 0.6},
     ]
+    write_json(output_dir / 'gat_protocol.json', {
+        'grid': grid, 'seed': seed, 'max_epochs': max_epochs, 'patience': patience,
+        'selection': 'minimum best_val_loss; ties use grid order',
+        'attention_dropout': 'same as candidate dropout', 'output_heads': 1, 'num_layers': 2,
+        'split_id': 'cora_planetoid_public', 'normalize_features': True,
+        'input_split_hash': mapping_hash({key: getattr(data, key).numpy() for key in
+                                          ('x', 'edge_index', 'train_mask', 'val_mask')}),
+    })
+    write_json(output_dir / 'gat_environment.json', environment(REPO_ROOT))
 
     results: list[dict[str, Any]] = []
     best_config: dict[str, Any] | None = None
@@ -174,6 +193,7 @@ def run_grid_search(
             dropout=params["dropout"],
             feature_dropout=params["dropout"],
             negative_slope=0.2,
+            attention_dropout=params['dropout'],
         ).cpu()
 
         optimizer = torch.optim.Adam(
@@ -229,6 +249,7 @@ def run_grid_search(
         out_heads=1,
         dropout=best_config["dropout"],
         feature_dropout=best_config["dropout"],
+        attention_dropout=best_config['dropout'],
     ).cpu()
     best_model.load_state_dict(best_state)
     best_model.eval()
@@ -236,6 +257,13 @@ def run_grid_search(
     with torch.no_grad():
         test_logits = best_model(x, edge_index)
         test_metrics = evaluate_node_classification(test_logits, y, test_mask)
+    np.savez_compressed(output_dir / 'gat_predictions.npz',
+                        node_id=test_mask.nonzero().flatten().numpy(),
+                        y_true=y[test_mask].numpy(),
+                        y_pred=test_logits[test_mask].argmax(-1).numpy(),
+                        logits=test_logits[test_mask].numpy())
+    np.savez_compressed(output_dir / 'gat_masks.npz', **{key: getattr(data, key).numpy()
+                        for key in ('train_mask', 'val_mask', 'test_mask')})
 
     final_report = {
         "dataset": "Cora",
@@ -245,6 +273,9 @@ def run_grid_search(
         "num_configurations": len(results),
         "configurations": results,
         "best_configuration": best_config,
+        "checkpoint_sha256": digest(best_checkpoint_path),
+        "predictions_sha256": digest(output_dir / 'gat_predictions.npz'),
+        "masks_sha256": digest(output_dir / 'gat_masks.npz'),
         "final_test_evaluation": {
             "test_accuracy": test_metrics["accuracy"],
             "test_macro_f1": test_metrics["macro_f1"],

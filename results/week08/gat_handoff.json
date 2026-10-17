@@ -1,0 +1,33 @@
+{
+  "dataset": "Cora",
+  "model": "GAT",
+  "seed": 42,
+  "num_layers": 2,
+  "output_heads": 1,
+  "selection": "minimum best_val_loss; ties use grid order",
+  "max_epochs": 200,
+  "patience": 20,
+  "num_configurations": 8,
+  "selected": {
+    "config_id": 7,
+    "hidden_dim": 16,
+    "heads": 8,
+    "learning_rate": 0.005,
+    "weight_decay": 0.0005,
+    "dropout": 0.4,
+    "stopped_epoch": 200,
+    "best_epoch": 189,
+    "best_val_loss": 0.6794008016586304,
+    "val_accuracy": 0.812,
+    "val_macro_f1": 0.8012218832929454
+  },
+  "attention_dropout": 0.4,
+  "feature_dropout": 0.4,
+  "negative_slope": 0.2,
+  "normalize_features": true,
+  "split_id": "cora_planetoid_public",
+  "source": "results/week08/gat_tuning.json",
+  "source_revision": "c430f494",
+  "integration_revision": "5e1ff82c",
+  "note": "Merged API default lost B attention-dropout semantics; corrected alias captures dropout before feature_dropout override. Week 7 explicit attention_dropout remains unchanged."
+}

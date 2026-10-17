@@ -1,0 +1,16 @@
+[
+  {
+    "number": 10,
+    "state": "closed",
+    "merged_at": "2026-10-17T03:45:51Z",
+    "merge_commit_sha": "84f2b56aca075191bc64627b6b5c48cec2849abb",
+    "html_url": "https://github.com/J0sh4fun/gnn-node-link-prediction/pull/10"
+  },
+  {
+    "number": 11,
+    "state": "closed",
+    "merged_at": "2026-10-17T03:58:23Z",
+    "merge_commit_sha": "5e1ff82c1f485cc0fb32075db5a4d866969fbfce",
+    "html_url": "https://github.com/J0sh4fun/gnn-node-link-prediction/pull/11"
+  }
+]

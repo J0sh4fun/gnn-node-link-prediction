@@ -23,7 +23,7 @@ class GAT(nn.Module):
         heads: int = 8,
         output_heads: int = 1,
         dropout: float = 0.6,
-        attention_dropout: float = 0.6,
+        attention_dropout: float | None = None,
         *,
         hidden_dim: int | None = None,
         num_classes: int | None = None,
@@ -32,6 +32,10 @@ class GAT(nn.Module):
         negative_slope: float = 0.2,
     ) -> None:
         super().__init__()
+        # B's API used dropout for attention and feature_dropout for features.
+        # Capture the attention value before resolving the feature alias.
+        if attention_dropout is None:
+            attention_dropout = dropout
         # Resolve aliases
         if hidden_channels is None:
             hidden_channels = hidden_dim if hidden_dim is not None else 8

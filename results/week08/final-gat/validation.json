@@ -1,0 +1,7 @@
+{
+  "stopped_epoch": 200,
+  "best_epoch": 189,
+  "best_val_loss": 0.6794008016586304,
+  "val_accuracy": 0.812,
+  "val_macro_f1": 0.8012218832929454
+}

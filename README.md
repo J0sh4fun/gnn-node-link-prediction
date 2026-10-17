@@ -299,5 +299,5 @@ python -m scripts.nc_week08 tune --output-dir runs/week08-new/search
 [Báo cáo tuning/final](report/week08/member_a.md), [protocol](configs/node_classification_week08.json),
 [bảng final](results/week08/comparison.csv). Final GCN đã chạy một lần, có predictions/logits
 và masks trong `results/week08/final-gcn/`; không chạy lại final để kiểm tra tái lập.
-GAT final đang chờ cấu hình tuning của B. GCN hỗ trợ `num_layers >= 2`;
+GAT final đã có [artifact khôi phục](results/week08/final-gat/summary.json); test được chạy lại theo yêu cầu người dùng và khớp final B. Xem [báo cáo hoàn tất và ngoại lệ protocol](report/week08/completion.md). GCN hỗ trợ `num_layers >= 2`;
 mặc định hai tầng vẫn tương thích tuần 7.

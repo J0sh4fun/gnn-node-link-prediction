@@ -1,0 +1,12 @@
+{
+  "test_evaluated": false,
+  "reason": "Validation mismatch with attention dropout 0.6; merged B API had lost dropout=0.4 semantics",
+  "observed": {
+    "stopped_epoch": 200,
+    "best_epoch": 189,
+    "best_val_loss": 0.7104304432868958,
+    "val_accuracy": 0.808,
+    "val_macro_f1": 0.7963762611893238
+  },
+  "retry": "Fix alias semantics; same frozen candidate 7, attention and feature dropout 0.4; no new search"
+}
