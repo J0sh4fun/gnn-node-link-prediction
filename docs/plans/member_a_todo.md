@@ -18,7 +18,7 @@ PR kế hoạch và tracker: [#3 — Member A plan and progress checklist](https
 <!-- todo-sync:summary:start -->
 | To do | Doing | Review | Done | Tổng |
 |---:|---:|---:|---:|---:|
-| 10 | 2 | 0 | 10 | 22 |
+| 10 | 1 | 1 | 10 | 22 |
 
 **10/22 task đã nghiệm thu và tích hợp main.** Số task không biểu thị phần trăm khối lượng.
 
@@ -68,7 +68,7 @@ Chi tiết: [todo tuần 6 của B](member_b_week06_todo.md). A nhận GATLayer 
 - [x] **A10 · Tuần 7 · Done** — Đã có [GCN hai tầng](../../models/gcn.py), logits `[N, C]`, ReLU/dropout giữa tầng, mỗi tầng nhận cạnh thô. Forward/backward và trainer pass; xem [nghiệm thu tuần 7](../../report/week07/member_a.md). Đã tích hợp qua PR #9 (merge `7074f7d3`).
 - [x] **A11 · Tuần 7 · Done** — Đã có [GAT hai tầng độc lập](../../models/gat.py), hidden heads concat/output heads average, ELU và feature/attention dropout. Tests mạng và trainer pass; đầu vào B06-01–B06-04 đã tích hợp main. Xem [báo cáo](../../report/week07/member_a.md); đã tích hợp qua PR #9 (merge `7074f7d3`).
 - [x] **A12 · Tuần 7 · Done** — Đã chạy [runner NC](../../scripts/node_classification.py) trên Cora cùng split/preprocessing, seed 42; lưu config/environment/history/checkpoint/hash. Validation Accuracy GCN/GAT 0,776/0,800; [bảng MLP/GCN/GAT](../../results/week07/comparison.csv), [báo cáo RQ1/RQ2](../../report/week07/member_a.md). 131 passed, 1 skipped (CUDA); chưa chấm test. Weights ở `runs/week07-a/` (local, ignored), có lệnh tái tạo. Đã tích hợp qua PR #9 (merge `7074f7d3`).
-- [ ] **A13 · Tuần 8 · Doing** — GCN: search 11 cấu hình định trước ở `configs/node_classification_week08.json`, seed 42, 200 epoch/run, chọn minimum val_loss; runner `scripts/nc_week08.py`. Chờ cấu hình GAT đã tuning từ B; không thay bằng cấu hình sơ bộ tuần 7. Phụ thuộc A12. Chốt trước 3–5 ablation tuần 10 và cách phân tích; tất cả tuning chỉ dùng validation.
+- [ ] **A13 · Tuần 8 · Review** — GCN tuning 11 cấu hình đã tích hợp PR #10; đã nhận GAT config 7 từ PR #11 (8 cấu hình, seed 42, minimum val_loss). [Handoff](../experiments/week08_gat_handoff.md) ghi đầy đủ budget/preprocessing/dropout; sửa API dropout sau merge và tái lập validation khớp chính xác. Giữ nguyên 5 ablation định trước. 145 passed/1 skip CUDA; chờ tích hợp bản sửa/handoff.
 - [ ] **A14 · Tuần 8 · Doing** — GCN đã restore best checkpoint và final một lần: Accuracy 82,10%, Macro-F1 81,07%; [predictions/summary](../../results/week08/final-gcn/summary.json), [bảng](../../results/week08/comparison.csv). Chờ B bàn giao GAT tuning trước final GAT; dùng lại MLP final lịch sử. Lưu predictions, bảng Accuracy/Macro-F1, config/versions/checkpoint, liên hệ RQ1/RQ2; check-in 2. Phụ thuộc A13 và cấu hình GAT của B; không chọn biến thể tiếp theo bằng điểm test.
 
 ### Tuần 9–10 — Hỗ trợ LP, ablation và lỗi
@@ -110,3 +110,5 @@ Khi cần, thêm dòng với: `ngày | task ID | trạng thái | commit/PR/run/r
 | 2026-10-17 | A14 | Doing | [Final GCN](../../results/week08/final-gcn/summary.json), predictions/logits/masks và persistent claim; [report](../../report/week08/member_a.md) | 1.000 test nodes, 82,10% Accuracy/81,07% Macro-F1; metrics kiểm chứng từ predictions; GAT/check-in 2 còn chờ B |
 
 | 2026-10-17 | A13/A14 | Doing | [PR #10](https://github.com/J0sh4fun/gnn-node-link-prediction/pull/10), commits `0cf2917c` (A13) / `a7a69194` (A14) | Phần GCN sẵn sàng review; còn GAT tuning/final và phối hợp B; không tự approve/merge |
+
+| 2026-10-17 | A13 | Review | [Handoff và phân tích merge](../experiments/week08_gat_handoff.md), [config](../../results/week08/gat_handoff.json) | Nhận B config 7; sửa dropout alias, validation khớp bản gốc; 145 passed/1 skip; chờ merge bản sửa |

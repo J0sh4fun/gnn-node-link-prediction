@@ -7,6 +7,15 @@ import torch.nn as nn
 from models.gat import GAT
 
 
+def test_legacy_dropout_alias_preserves_attention_setting():
+    model = GAT(hidden_dim=16, heads=8, dropout=0.4, feature_dropout=0.2)
+    assert model.conv1.dropout == model.conv2.dropout == 0.4
+    assert model.dropout.p == 0.2
+    explicit = GAT(hidden_channels=16, dropout=0.2, attention_dropout=0.6)
+    assert explicit.conv1.dropout == explicit.conv2.dropout == 0.6
+    assert explicit.dropout.p == 0.2
+
+
 def test_gat_forward_shape():
     """Verify output logits shape matches [num_nodes, num_classes]."""
     num_nodes = 10
