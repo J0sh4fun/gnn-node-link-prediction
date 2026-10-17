@@ -1,4 +1,4 @@
 model,status,accuracy,macro_f1,source
 MLP,historical final reused,0.568,0.5386504117428538,results/baseline_mlp_log.json
 GCN,final once,0.821,0.8107120366919008,results/week08/final-gcn/summary.json
-GAT,pending B tuned configuration,,,
+GAT,authorized repeat; matches B original final,0.822,0.8131668880445113,results/week08/final-gat/summary.json

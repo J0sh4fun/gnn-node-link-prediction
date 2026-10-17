@@ -18,7 +18,7 @@ PR kế hoạch và tracker: [#3 — Member A plan and progress checklist](https
 <!-- todo-sync:summary:start -->
 | To do | Doing | Review | Done | Tổng |
 |---:|---:|---:|---:|---:|
-| 10 | 1 | 1 | 10 | 22 |
+| 10 | 0 | 2 | 10 | 22 |
 
 **10/22 task đã nghiệm thu và tích hợp main.** Số task không biểu thị phần trăm khối lượng.
 
@@ -35,7 +35,7 @@ Tuần 7 A10–A12 đã nghiệm thu kỹ thuật và tích hợp `main` qua
 nhánh `feature/a-week07-node-classification` → `main`.
 [Báo cáo và lệnh tái lập](../../report/week07/member_a.md). API GitHub ngày 2026-10-17 xác nhận merge commit `7074f7d3`; đối chiếu source tuần 7 trên main và 136 passed/1 skip của suite hiện tại.
 
-Tuần 8: phần GCN đã hoàn tất kỹ thuật tại [PR #10](https://github.com/J0sh4fun/gnn-node-link-prediction/pull/10) (Ready for review); cấu hình GAT đã tuning của B chưa được bàn giao. A13/A14 toàn phần vẫn Doing do thiếu đầu vào GAT. Xem [báo cáo tuần 8](../../report/week08/member_a.md).
+Tuần 8: GCN/GAT đã đủ đầu ra kỹ thuật; **A13/A14 Review**, chờ tích hợp bản sửa dropout và artifact GAT. [Báo cáo hoàn tất](../../report/week08/completion.md). GAT test đã chạy lại theo yêu cầu người dùng, là ngoại lệ protocol một lần; không tự ghi nhận check-in/phê duyệt cá nhân.
 
 ## Checklist thực hiện
 
@@ -69,7 +69,7 @@ Chi tiết: [todo tuần 6 của B](member_b_week06_todo.md). A nhận GATLayer 
 - [x] **A11 · Tuần 7 · Done** — Đã có [GAT hai tầng độc lập](../../models/gat.py), hidden heads concat/output heads average, ELU và feature/attention dropout. Tests mạng và trainer pass; đầu vào B06-01–B06-04 đã tích hợp main. Xem [báo cáo](../../report/week07/member_a.md); đã tích hợp qua PR #9 (merge `7074f7d3`).
 - [x] **A12 · Tuần 7 · Done** — Đã chạy [runner NC](../../scripts/node_classification.py) trên Cora cùng split/preprocessing, seed 42; lưu config/environment/history/checkpoint/hash. Validation Accuracy GCN/GAT 0,776/0,800; [bảng MLP/GCN/GAT](../../results/week07/comparison.csv), [báo cáo RQ1/RQ2](../../report/week07/member_a.md). 131 passed, 1 skipped (CUDA); chưa chấm test. Weights ở `runs/week07-a/` (local, ignored), có lệnh tái tạo. Đã tích hợp qua PR #9 (merge `7074f7d3`).
 - [ ] **A13 · Tuần 8 · Review** — GCN tuning 11 cấu hình đã tích hợp PR #10; đã nhận GAT config 7 từ PR #11 (8 cấu hình, seed 42, minimum val_loss). [Handoff](../experiments/week08_gat_handoff.md) ghi đầy đủ budget/preprocessing/dropout; sửa API dropout sau merge và tái lập validation khớp chính xác. Giữ nguyên 5 ablation định trước. 145 passed/1 skip CUDA; chờ tích hợp bản sửa/handoff.
-- [ ] **A14 · Tuần 8 · Doing** — GCN đã restore best checkpoint và final một lần: Accuracy 82,10%, Macro-F1 81,07%; [predictions/summary](../../results/week08/final-gcn/summary.json), [bảng](../../results/week08/comparison.csv). Chờ B bàn giao GAT tuning trước final GAT; dùng lại MLP final lịch sử. Lưu predictions, bảng Accuracy/Macro-F1, config/versions/checkpoint, liên hệ RQ1/RQ2; check-in 2. Phụ thuộc A13 và cấu hình GAT của B; không chọn biến thể tiếp theo bằng điểm test.
+- [ ] **A14 · Tuần 8 · Review** — Đủ bảng final MLP/GCN/GAT: Accuracy 56,80%/82,10%/82,20%; Macro-F1 53,87%/81,07%/81,32%. Giữ MLP/GCN lịch sử; GAT đã dựng lại checkpoint, validation khớp B rồi đánh giá lặp theo yêu cầu người dùng. [Summary/predictions](../../results/week08/final-gat/summary.json), [báo cáo mốc](../../report/week08/completion.md), 145 passed/1 skip. Ngoại lệ protocol được ghi rõ; chờ review/merge, không tự phê duyệt check-in 2.
 
 ### Tuần 9–10 — Hỗ trợ LP, ablation và lỗi
 
@@ -112,3 +112,5 @@ Khi cần, thêm dòng với: `ngày | task ID | trạng thái | commit/PR/run/r
 | 2026-10-17 | A13/A14 | Doing | [PR #10](https://github.com/J0sh4fun/gnn-node-link-prediction/pull/10), commits `0cf2917c` (A13) / `a7a69194` (A14) | Phần GCN sẵn sàng review; còn GAT tuning/final và phối hợp B; không tự approve/merge |
 
 | 2026-10-17 | A13 | Review | [Handoff và phân tích merge](../experiments/week08_gat_handoff.md), [config](../../results/week08/gat_handoff.json) | Nhận B config 7; sửa dropout alias, validation khớp bản gốc; 145 passed/1 skip; chờ merge bản sửa |
+
+| 2026-10-17 | A14 | Review | [Báo cáo hoàn tất](../../report/week08/completion.md), [GAT final](../../results/week08/final-gat/summary.json), [audit](../../results/week08/completion_audit.json) | Người dùng cho phép chạy lại GAT test; validation/final khớp B, checkpoint/predictions/masks đủ; không chạy lại MLP/GCN; chờ merge, giữ ngoại lệ protocol |

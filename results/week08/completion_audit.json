@@ -1,0 +1,18 @@
+{
+  "model_evaluation_repeated_during_audit": false,
+  "user_authorized_gat_repeat": true,
+  "original_gat_report_preserved": true,
+  "checks": {
+    "gcn": {
+      "predictions_hash_and_metrics_verified": true,
+      "num_test_nodes": 1000
+    },
+    "gat": {
+      "predictions_hash_and_metrics_verified": true,
+      "num_test_nodes": 1000
+    }
+  },
+  "same_graph_and_masks": true,
+  "recovered_gat_matches_original_final": true,
+  "checkpoint_sha256_verified": true
+}
