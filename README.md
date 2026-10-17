@@ -286,3 +286,18 @@ Cấu hình: [week07](configs/node_classification_week07.json). Mỗi lần ch�
 thư mục mới; config, environment, lịch sử và best checkpoint được lưu cùng run.
 Xem [báo cáo A10–A12](report/week07/member_a.md) và
 [bảng validation MLP/GCN/GAT](results/week07/comparison.csv). Final test thuộc tuần 8.
+
+
+## Node Classification tuần 8
+
+Search GCN định trước 11 cấu hình, seed 42; chọn bằng validation loss:
+
+```powershell
+python -m scripts.nc_week08 tune --output-dir runs/week08-new/search
+```
+
+[Báo cáo tuning/final](report/week08/member_a.md), [protocol](configs/node_classification_week08.json),
+[bảng final](results/week08/comparison.csv). Final GCN đã chạy một lần, có predictions/logits
+và masks trong `results/week08/final-gcn/`; không chạy lại final để kiểm tra tái lập.
+GAT final đang chờ cấu hình tuning của B. GCN hỗ trợ `num_layers >= 2`;
+mặc định hai tầng vẫn tương thích tuần 7.

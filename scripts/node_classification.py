@@ -29,7 +29,7 @@ def fit_validation(data, model_name: str, config: dict, output: Path,
     params = config["models"][model_name]
     common = dict(in_channels=data.x.size(1), hidden_channels=params["hidden_dim"],
                   out_channels=7, dropout=params["dropout"])
-    model = GCN(**common) if model_name == "gcn" else GAT(
+    model = GCN(**common, num_layers=params.get("num_layers", 2)) if model_name == "gcn" else GAT(
         **common, heads=params["num_heads"], output_heads=params["output_heads"],
         attention_dropout=params["attention_dropout"])
     output = Path(output)
@@ -39,8 +39,8 @@ def fit_validation(data, model_name: str, config: dict, output: Path,
     input_hash = mapping_hash({name: getattr(data, name).cpu().numpy()
                                for name in ("x", "edge_index")})
     record = dict(model=model_name.upper(), dataset="Cora", seed=config["seed"],
-                  num_layers=2, decoder=None,
-                  **{"num_heads": None, **params}, max_epochs=config["max_epochs"], patience=config["patience"],
+                  decoder=None,
+                  **{"num_layers": 2, "num_heads": None, **params}, max_epochs=config["max_epochs"], patience=config["patience"],
                   num_threads=config["num_threads"], device="cpu",
                   evaluation_split="validation", test_score=None,
                   checkpoint_metric="val_loss", checkpoint_mode="min",
