@@ -1,6 +1,6 @@
 # Tuần 8 — Tuning và final NC của A
 
-Ngày kiểm chứng: **2026-10-17**. Nhánh `feature/a-week08-nc-tuning`.
+Ngày kiểm chứng: **2026-10-17**. Nhánh `feature/a-week08-nc-tuning`. [PR #10](https://github.com/J0sh4fun/gnn-node-link-prediction/pull/10) Ready for review; chưa merge.
 
 ## Tiến độ và phụ thuộc
 

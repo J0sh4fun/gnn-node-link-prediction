@@ -35,7 +35,7 @@ Tuần 7 A10–A12 đã nghiệm thu kỹ thuật và tích hợp `main` qua
 nhánh `feature/a-week07-node-classification` → `main`.
 [Báo cáo và lệnh tái lập](../../report/week07/member_a.md). API GitHub ngày 2026-10-17 xác nhận merge commit `7074f7d3`; đối chiếu source tuần 7 trên main và 136 passed/1 skip của suite hiện tại.
 
-Tuần 8 đang thực hiện phần GCN; cấu hình GAT đã tuning của B chưa được bàn giao. Xem [báo cáo tuần 8](../../report/week08/member_a.md).
+Tuần 8: phần GCN đã hoàn tất kỹ thuật tại [PR #10](https://github.com/J0sh4fun/gnn-node-link-prediction/pull/10) (Ready for review); cấu hình GAT đã tuning của B chưa được bàn giao. A13/A14 toàn phần vẫn Doing do thiếu đầu vào GAT. Xem [báo cáo tuần 8](../../report/week08/member_a.md).
 
 ## Checklist thực hiện
 
@@ -108,3 +108,5 @@ Khi cần, thêm dòng với: `ngày | task ID | trạng thái | commit/PR/run/r
 | 2026-10-17 | A13 | Doing | [Search/selection](../../results/week08/search/selection.json), [11 runs](../../results/week08/search.csv), [protocol](../../configs/node_classification_week08.json), [report](../../report/week08/member_a.md) | Phần GCN hoàn tất kỹ thuật; 136 passed/1 skip; cấu hình GAT và phối hợp danh sách ablation còn chờ B |
 
 | 2026-10-17 | A14 | Doing | [Final GCN](../../results/week08/final-gcn/summary.json), predictions/logits/masks và persistent claim; [report](../../report/week08/member_a.md) | 1.000 test nodes, 82,10% Accuracy/81,07% Macro-F1; metrics kiểm chứng từ predictions; GAT/check-in 2 còn chờ B |
+
+| 2026-10-17 | A13/A14 | Doing | [PR #10](https://github.com/J0sh4fun/gnn-node-link-prediction/pull/10), commits `0cf2917c` (A13) / `a7a69194` (A14) | Phần GCN sẵn sàng review; còn GAT tuning/final và phối hợp B; không tự approve/merge |
